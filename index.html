@@ -161,51 +161,8 @@
         gap: 1.5rem !important;
         min-width: 0 !important;
       }
-      #crew-headers {
-        display: grid !important;
-      }
-      .grid-responsive-crew {
-        display: grid !important;
-        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-        gap: 1.5rem !important;
-        flex-direction: row !important;
-      }
-      .grid-responsive-crew > div {
-        grid-column: span 3 / span 3 !important;
-        width: auto !important;
-      }
-      .grid-responsive-crew > div:first-child {
-        grid-column: span 3 / span 3 !important;
-      }
       #hoja-registro table td input {
         display: none !important;
-      }
-    }
-
-    /* Responsive grid for crew on screen */
-    .grid-responsive-crew {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 1rem !important;
-    }
-    
-    .grid-responsive-crew > div {
-      width: 100% !important;
-    }
-
-    @media (min-width: 768px) {
-      .grid-responsive-crew {
-        display: grid !important;
-        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-        gap: 1.5rem !important;
-        flex-direction: row !important;
-      }
-      .grid-responsive-crew > div {
-        grid-column: span 3 / span 3 !important;
-        width: auto !important;
-      }
-      .grid-responsive-crew > div:first-child {
-        grid-column: span 3 / span 3 !important;
       }
     }
   </style>
@@ -241,7 +198,7 @@
       </h1>
     </div>
 
-    <!-- Metadata Fields (Fecha, Ruta, etc. - inline on all devices) -->
+    <!-- Metadata Fields -->
     <div class="space-y-3 mb-6 text-xs sm:text-sm">
       <!-- Fecha Row -->
       <div class="flex items-end w-full">
@@ -252,7 +209,7 @@
         </div>
       </div>
       
-      <!-- Ruta, Unidad, Codigo, Km Row (Compact Inline Row) -->
+      <!-- Ruta, Unidad, Codigo, Km Row -->
       <div class="flex flex-wrap items-end gap-x-4 gap-y-2 w-full text-xs">
         <div class="flex items-end min-w-[140px] flex-grow">
           <span class="font-bold shrink-0">Ruta:</span>
@@ -301,7 +258,7 @@
       </div>
     </div>
 
-    <!-- Side-by-side Tables Grid (Wrapped with overflow-x-auto to prevent squishing on narrow screens) -->
+    <!-- Side-by-side Tables Grid -->
     <div class="w-full overflow-x-auto pb-2">
       <div id="tablas-container" class="min-w-[580px] lg:min-w-0 grid grid-cols-12 gap-x-3 sm:gap-x-6 items-start mb-4">
         
@@ -454,9 +411,77 @@
       </div>
     </div>
 
-    <!-- Crew / Signatures Section -->
-    <div class="mt-6 text-xs sm:text-sm">
-      <div id="crew-headers" class="hidden md:grid grid-cols-12 gap-x-6 mb-2 text-center font-bold text-xs">
+    <!-- Crew / Signatures Section (EDIT MODE) -->
+    <div id="crew-edit" class="edit-field mt-6 no-print">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Conductor Principal -->
+        <div class="border border-gray-300 p-3 bg-gray-50 rounded shadow-sm space-y-3">
+          <div class="font-bold text-xs uppercase text-amber-600 border-b border-gray-200 pb-1">Conductor Principal</div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Nombre Conductor Principal:</label>
+            <input type="text" id="input-cond-principal" placeholder="Escribir nombre..." class="w-full p-2 border border-gray-300 rounded bg-white outline-none text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Firma Conductor Principal:</label>
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-32 border border-dashed border-gray-400 rounded flex items-center justify-center bg-white relative overflow-hidden">
+                <img class="sig-img-principal hidden max-h-full max-w-full object-contain" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Principal">
+              </div>
+              <label class="cursor-pointer text-xs bg-black text-white px-3 py-1.5 border border-black hover:bg-neutral-800 transition rounded font-bold">
+                Subir Firma
+                <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-principal')">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conductor Alterno -->
+        <div class="border border-gray-300 p-3 bg-gray-50 rounded shadow-sm space-y-3">
+          <div class="font-bold text-xs uppercase text-amber-600 border-b border-gray-200 pb-1">Conductor Alterno</div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Nombre Conductor Alterno:</label>
+            <input type="text" id="input-cond-alterno" placeholder="Escribir nombre..." class="w-full p-2 border border-gray-300 rounded bg-white outline-none text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Firma Conductor Alterno:</label>
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-32 border border-dashed border-gray-400 rounded flex items-center justify-center bg-white relative overflow-hidden">
+                <img class="sig-img-alterno hidden max-h-full max-w-full object-contain" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Alterno">
+              </div>
+              <label class="cursor-pointer text-xs bg-black text-white px-3 py-1.5 border border-black hover:bg-neutral-800 transition rounded font-bold">
+                Subir Firma
+                <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-alterno')">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ayudante -->
+        <div class="border border-gray-300 p-3 bg-gray-50 rounded shadow-sm space-y-3">
+          <div class="font-bold text-xs uppercase text-amber-600 border-b border-gray-200 pb-1">Ayudante</div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Nombre Ayudante:</label>
+            <input type="text" id="input-ayudante" placeholder="Escribir nombre..." class="w-full p-2 border border-gray-300 rounded bg-white outline-none text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-[10px] pb-1">Firma Ayudante:</label>
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-32 border border-dashed border-gray-400 rounded flex items-center justify-center bg-white relative overflow-hidden">
+                <img class="sig-img-ayudante hidden max-h-full max-w-full object-contain" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Ayudante">
+              </div>
+              <label class="cursor-pointer text-xs bg-black text-white px-3 py-1.5 border border-black hover:bg-neutral-800 transition rounded font-bold">
+                Subir Firma
+                <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-ayudante')">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crew / Signatures Section (PREVIEW & PRINT MODE) -->
+    <div id="crew-print" class="preview-field hidden mt-6 text-xs sm:text-sm">
+      <div class="grid grid-cols-12 gap-x-6 mb-2 text-center font-bold text-xs">
         <div class="col-span-3"></div>
         <div class="col-span-3">Conductor Principal</div>
         <div class="col-span-3">Conductor Alterno</div>
@@ -464,137 +489,104 @@
       </div>
 
       <!-- Crew Names Row -->
-      <div class="grid-responsive-crew items-end mb-4">
-        <div class="col-span-3 font-bold text-xs pb-1 md:block hidden">Nombres</div>
+      <div class="grid grid-cols-12 gap-x-6 items-end mb-4">
+        <div class="col-span-3 font-bold text-xs pb-1">Nombres</div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Nombres - Conductor Principal:</span>
           <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-cond-principal" placeholder="Conductor Principal..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-cond-principal" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+            <span id="preview-cond-principal" class="campo-linea font-normal px-1 w-full block text-left"></span>
           </div>
         </div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Nombres - Conductor Alterno:</span>
           <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-cond-alterno" placeholder="Conductor Alterno..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-cond-alterno" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+            <span id="preview-cond-alterno" class="campo-linea font-normal px-1 w-full block text-left"></span>
           </div>
         </div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Nombres - Ayudante:</span>
           <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-ayudante" placeholder="Ayudante..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-ayudante" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+            <span id="preview-ayudante" class="campo-linea font-normal px-1 w-full block text-left"></span>
           </div>
         </div>
       </div>
 
-      <!-- Firma Row with image upload option for each role -->
-      <div class="grid-responsive-crew items-end mb-6">
-        <div class="col-span-3 font-bold text-xs pb-3 md:block hidden">Firma</div>
-        
-        <!-- Conductor Principal Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Conductor Principal:</span>
+      <!-- Firma Row -->
+      <div class="grid grid-cols-12 gap-x-6 items-end mb-6">
+        <div class="col-span-3 font-bold text-xs pb-3">Firma</div>
+        <div class="col-span-3 text-center">
           <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-principal" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Principal">
+            <img class="sig-img-principal hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Principal">
             <div class="w-full border-b border-black"></div>
-          </div>
-          <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
-              Subir Firma
-              <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-principal')">
-            </label>
           </div>
         </div>
-
-        <!-- Conductor Alterno Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Conductor Alterno:</span>
+        <div class="col-span-3 text-center">
           <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-alterno" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Alterno">
+            <img class="sig-img-alterno hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Alterno">
             <div class="w-full border-b border-black"></div>
-          </div>
-          <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
-              Subir Firma
-              <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-alterno')">
-            </label>
           </div>
         </div>
-
-        <!-- Ayudante Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Ayudante:</span>
+        <div class="col-span-3 text-center">
           <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-ayudante" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Ayudante">
+            <img class="sig-img-ayudante hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Ayudante">
             <div class="w-full border-b border-black"></div>
           </div>
-          <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
-              Subir Firma
-              <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-ayudante')">
-            </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Details Block (Novedades, Estación, Nombre Despacho) -->
+    <div class="space-y-4 mt-6 text-xs sm:text-sm">
+      <!-- Row 1: Mechanical News / Fuel Station -->
+      <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
+        <div class="flex items-end w-full lg:w-[50%] shrink-0">
+          <span class="font-bold shrink-0">Novedades Mecanicas:</span>
+          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
+            <input type="text" id="input-nov-mecanicas" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
+            <span id="preview-nov-mecanicas" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
+          </div>
+        </div>
+        <div class="flex items-end flex-grow">
+          <span class="font-bold shrink-0">Lugar/Estacion Combustible:</span>
+          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
+            <select id="input-lugar-combustible" onchange="checkCustomStation(this.value)" class="edit-field w-full bg-transparent text-black outline-none px-2 cursor-pointer appearance-none pb-0.5 text-xs">
+              <option value="">____________________</option>
+              <option value="Estacion P & S (Frente Transplaneta)">Estacion P & S (Frente Transplaneta)</option>
+              <option value="Petrocomercial Nueva Aurora(Av.Mariscal)">Petrocomercial Nueva Aurora(Av.Mariscal)</option>
+              <option value="Petrocomercial La Florencia (Escuela Riobamba)">Petrocomercial La Florencia (Escuela Riobamba)</option>
+              <option value="Clean Ecuatoriana(Av.Mariscal )">Clean Ecuatoriana(Av.Mariscal )</option>
+              <option value="Petrocomercial Quitumbe(Av.Mariscal)">Petrocomercial Quitumbe(Av.Mariscal)</option>
+              <option value="Otra Estacion">Otra Estacion</option>
+              <option value="No Tanquea">No Tanquea</option>
+            </select>
+            <input type="text" id="input-custom-station" placeholder="Especificar estación..." class="edit-field hidden bg-transparent text-black outline-none px-2 ml-2 w-48 text-xs border border-gray-400 pb-0.5">
+            <span id="preview-lugar-combustible" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Details Block (Novedades, Estación, Nombre Despacho) -->
-      <div class="space-y-4 mt-6">
-        <!-- Row 1: Mechanical News / Fuel Station -->
-        <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full text-xs sm:text-sm">
-          <div class="flex items-end w-full lg:w-[50%] shrink-0">
-            <span class="font-bold shrink-0">Novedades Mecanicas:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <input type="text" id="input-nov-mecanicas" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
-              <span id="preview-nov-mecanicas" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
-            </div>
-          </div>
-          <div class="flex items-end flex-grow">
-            <span class="font-bold shrink-0">Lugar/Estacion Combustible:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <select id="input-lugar-combustible" onchange="checkCustomStation(this.value)" class="edit-field w-full bg-transparent text-black outline-none px-2 cursor-pointer appearance-none pb-0.5 text-xs">
-                <option value="">____________________</option>
-                <option value="Estacion P & S (Frente Transplaneta)">Estacion P & S (Frente Transplaneta)</option>
-                <option value="Petrocomercial Nueva Aurora(Av.Mariscal)">Petrocomercial Nueva Aurora(Av.Mariscal)</option>
-                <option value="Petrocomercial La Florencia (Escuela Riobamba)">Petrocomercial La Florencia (Escuela Riobamba)</option>
-                <option value="Clean Ecuatoriana(Av.Mariscal )">Clean Ecuatoriana(Av.Mariscal )</option>
-                <option value="Petrocomercial Quitumbe(Av.Mariscal)">Petrocomercial Quitumbe(Av.Mariscal)</option>
-                <option value="Otra Estacion">Otra Estacion</option>
-                <option value="No Tanquea">No Tanquea</option>
-              </select>
-              <input type="text" id="input-custom-station" placeholder="Especificar estación..." class="edit-field hidden bg-transparent text-black outline-none px-2 ml-2 w-48 text-xs border border-gray-400 pb-0.5">
-              <span id="preview-lugar-combustible" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
-            </div>
+      <!-- Row 2: Operational News / Dispatch name -->
+      <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
+        <div class="flex items-end w-full lg:w-[68%] shrink-0">
+          <span class="font-bold shrink-0">Novedades Operacionales o Fiscalizaciones:</span>
+          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
+            <input type="text" id="input-nov-operacionales" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
+            <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
           </div>
         </div>
+        <div class="flex flex-col flex-grow text-center justify-end h-[52px]">
+          <span class="font-bold text-xs pb-1 shrink-0">Nombre Despacho</span>
+          <div class="underline-container border-b border-black w-full min-h-[28px] flex items-end justify-center pb-1">
+            <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none pb-0.5 text-xs">
+              <option value="">____________________</option>
+              <option value="Andrea Trujillo">Andrea Trujillo</option>
+              <option value="César Lluco">César Lluco</option>
+            </select>
+            <span id="preview-nombre-despacho" class="preview-field campo-linea hidden font-normal px-1 text-center w-full block"></span>
+          </div>
+        </div>
+      </div>
 
-        <!-- Row 2: Operational News / Dispatch name -->
-        <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full text-xs sm:text-sm">
-          <div class="flex items-end w-full lg:w-[68%] shrink-0">
-            <span class="font-bold shrink-0">Novedades Operacionales o Fiscalizaciones:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <input type="text" id="input-nov-operacionales" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
-              <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
-            </div>
-          </div>
-          <div class="flex flex-col flex-grow text-center justify-end h-[52px]">
-            <span class="font-bold text-xs pb-1 shrink-0">Nombre Despacho</span>
-            <div class="underline-container border-b border-black w-full min-h-[28px] flex items-end justify-center pb-1">
-              <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-2 text-center cursor-pointer appearance-none pb-0.5 text-xs">
-                <option value="">____________________</option>
-                <option value="Andrea Trujillo">Andrea Trujillo</option>
-                <option value="César Lluco">César Lluco</option>
-              </select>
-              <span id="preview-nombre-despacho" class="preview-field campo-linea hidden font-normal px-2 text-center w-full block"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom Page Divider -->
-        <div class="pt-6">
-          <div class="border-t-[3px] border-black w-full"></div>
-        </div>
+      <!-- Bottom Page Divider -->
+      <div class="pt-6">
+        <div class="border-t-[3px] border-black w-full"></div>
       </div>
     </div>
   </div>
@@ -605,6 +597,14 @@
     function limitDigits(input, maxDigits) {
       if (input.value.length > maxDigits) {
         input.value = input.value.slice(0, maxDigits);
+      }
+    }
+
+    // Input synchronizer for split mobile/desktop crew fields
+    function syncInput(value, targetId) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.value = value;
       }
     }
 
@@ -695,13 +695,15 @@
     }
 
     // Image Signature Loader
-    function uploadSignature(input, targetImageId) {
+    function uploadSignature(input, targetImageClass) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          const imgElement = document.getElementById(targetImageId);
-          imgElement.src = e.target.result;
-          imgElement.classList.remove('hidden');
+          const imgElements = document.querySelectorAll('.' + targetImageClass);
+          imgElements.forEach(img => {
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+          });
         };
         reader.readAsDataURL(input.files[0]);
       }
