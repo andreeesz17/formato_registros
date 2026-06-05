@@ -183,6 +183,9 @@
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 1.5rem !important;
       }
+      #crew-headers {
+        display: grid !important;
+      }
       .grid-responsive-crew {
         display: grid !important;
         grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
@@ -430,7 +433,7 @@
 
     <!-- Crew / Signatures Section -->
     <div class="mt-8 text-sm">
-      <div class="hidden md:grid grid-responsive-crew mb-2 text-center font-bold text-xs">
+      <div id="crew-headers" class="hidden md:grid grid-cols-12 gap-x-6 mb-2 text-center font-bold text-xs">
         <div class="col-span-3"></div>
         <div class="col-span-3">Conductor Principal</div>
         <div class="col-span-3">Conductor Alterno</div>
