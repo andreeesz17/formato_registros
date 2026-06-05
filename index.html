@@ -55,14 +55,15 @@
       border-collapse: collapse !important;
     }
 
+    /* Standard cell heights */
     #hoja-registro table td {
-      height: 38px !important;
+      height: 34px !important;
       padding: 0 !important;
       vertical-align: middle !important;
     }
 
     #hoja-registro table th {
-      height: 40px !important;
+      height: 36px !important;
       padding: 0 !important;
       vertical-align: middle !important;
     }
@@ -83,27 +84,30 @@
     /* Align description column left in Gastos Table */
     .table-custom-gastos td:first-child .valor-centrado {
       justify-content: flex-start !important;
-      padding-left: 12px !important;
+      padding-left: 8px !important;
     }
 
-    /* Input default styling inside tables */
+    /* Input styling inside tables (pill style for ultra-compact edit mode) */
     #hoja-registro table td input {
       display: block !important;
-      height: 100% !important;
-      width: 100% !important;
+      height: 24px !important;
+      width: 90% !important;
+      margin: 0 auto !important;
       text-align: center !important;
       vertical-align: middle !important;
       line-height: normal !important;
       box-sizing: border-box !important;
-      background: transparent !important;
-      border: none !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 4px !important;
       outline: none !important;
+      font-size: 11px !important;
     }
 
-    /* Keep custom gasto descriptions left-aligned during edit */
+    /* Custom gasto descriptions left-aligned during edit */
     .table-custom-gastos td:first-child input {
       text-align: left !important;
-      padding-left: 12px !important;
+      padding-left: 8px !important;
     }
 
     /* Ensure hidden elements stay hidden */
@@ -111,7 +115,7 @@
       display: none !important;
     }
 
-    /* In preview mode, hide all input elements inside tables */
+    /* In preview mode, remove pill styling and hide input elements inside tables */
     .preview-mode table input, 
     .preview-mode table select, 
     .preview-mode table textarea {
@@ -134,37 +138,10 @@
     /* If the preview span is empty, render a clean border-bottom line across the container */
     .preview-mode .campo-linea:empty {
       border-bottom: 1px solid #000000 !important;
-      min-width: 80px;
+      min-width: 60px;
       width: 100%;
       display: inline-block !important;
       height: 12px;
-    }
-
-    /* Responsive grid for crew on screen */
-    .grid-responsive-crew {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 1rem !important;
-    }
-    
-    .grid-responsive-crew > div {
-      width: 100% !important;
-    }
-
-    @media (min-width: 768px) {
-      .grid-responsive-crew {
-        display: grid !important;
-        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-        gap: 1.5rem !important;
-        flex-direction: row !important;
-      }
-      .grid-responsive-crew > div {
-        grid-column: span 3 / span 3 !important;
-        width: auto !important;
-      }
-      .grid-responsive-crew > div:first-child {
-        grid-column: span 3 / span 3 !important;
-      }
     }
 
     /* Force physical A4 size side-by-side tables on Print or Export */
@@ -199,57 +176,60 @@
       .grid-responsive-crew > div:first-child {
         grid-column: span 3 / span 3 !important;
       }
+      #hoja-registro table td input {
+        display: none !important;
+      }
     }
   </style>
 </head>
-<body class="bg-gray-100 text-black min-h-screen font-sans p-2 sm:p-4 md:p-8">
+<body class="bg-gray-100 text-black min-h-screen font-sans p-1 sm:p-4">
 
   <!-- TOP CONTROL BAR (Screen-only) -->
-  <div class="no-print max-w-[900px] mx-auto bg-white border-2 border-black p-4 mb-4 flex flex-wrap justify-between items-center gap-4 shadow-md">
-    <div class="text-xs font-bold font-sans tracking-wide uppercase">Registro de Trabajo - Panel de Acciones</div>
-    <div class="flex flex-wrap gap-2">
-      <button id="btn-toggle-preview" onclick="togglePreview(true)" class="bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs py-2 px-4 border border-black transition">
+  <div class="no-print max-w-[900px] mx-auto bg-white border border-black p-2 mb-2 flex flex-wrap justify-between items-center gap-2 shadow-sm">
+    <div class="text-[10px] font-bold font-sans tracking-wide uppercase">Registro de Trabajo - Acciones</div>
+    <div class="flex flex-wrap gap-1.5">
+      <button id="btn-toggle-preview" onclick="togglePreview(true)" class="bg-amber-500 hover:bg-amber-600 text-black font-bold text-[10px] py-1 px-3 border border-black transition">
         Ver Vista Previa
       </button>
-      <button onclick="exportExcel()" class="bg-black hover:bg-neutral-800 text-white font-bold text-xs py-2 px-4 border border-black transition">
+      <button onclick="exportExcel()" class="bg-black hover:bg-neutral-800 text-white font-bold text-[10px] py-1 px-3 border border-black transition">
         Excel (.xlsx)
       </button>
-      <button onclick="exportImage()" class="bg-black hover:bg-neutral-800 text-white font-bold text-xs py-2 px-4 border border-black transition">
+      <button onclick="exportImage()" class="bg-black hover:bg-neutral-800 text-white font-bold text-[10px] py-1 px-3 border border-black transition">
         Imagen (.png)
       </button>
-      <button onclick="exportPDF()" class="bg-black hover:bg-neutral-800 text-white font-bold text-xs py-2 px-4 border border-black transition">
+      <button onclick="exportPDF()" class="bg-black hover:bg-neutral-800 text-white font-bold text-[10px] py-1 px-3 border border-black transition">
         PDF / Imprimir
       </button>
     </div>
   </div>
 
   <!-- MAIN SHEET CONTAINER -->
-  <div id="hoja-registro" class="max-w-[900px] mx-auto bg-white p-4 sm:p-6 text-black border border-gray-300 shadow-lg">
+  <div id="hoja-registro" class="max-w-[900px] mx-auto bg-white p-2 sm:p-6 text-black border border-gray-300 shadow-lg">
     
     <!-- Title Header -->
-    <div class="text-center mb-6">
-      <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-black" style="font-family: Arial, sans-serif; font-weight: 800;">
+    <div class="text-center mb-4">
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight text-black" style="font-family: Arial, sans-serif; font-weight: 800;">
         Coop.Transur “7 de Mayo” - Registro de Trabajo Diario
       </h1>
     </div>
 
-    <!-- Metadata Fields (Fecha, Ruta, etc.) -->
-    <div class="space-y-4 mb-6 text-sm">
+    <!-- Metadata Fields (Fecha, Ruta, etc. - inline on all devices) -->
+    <div class="space-y-2 mb-4 text-xs sm:text-sm">
       <!-- Fecha Row -->
       <div class="flex items-end w-full">
         <span class="font-bold shrink-0">Fecha:</span>
-        <div class="underline-container relative w-1/2 ml-2 border-b border-black min-h-[24px] flex items-end">
-          <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs sm:text-sm cursor-pointer pb-0.5">
-          <span id="display-date" onclick="editDate()" class="campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs sm:text-sm cursor-pointer"></span>
+        <div class="underline-container relative w-48 ml-2 border-b border-black min-h-[20px] flex items-end">
+          <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer">
+          <span id="display-date" onclick="editDate()" class="campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer"></span>
         </div>
       </div>
       
-      <!-- Ruta, Unidad, Codigo, Km Row -->
-      <div class="flex flex-wrap lg:flex-nowrap items-end gap-4 w-full">
-        <div class="flex items-end flex-grow min-w-[200px]">
+      <!-- Ruta, Unidad, Codigo, Km Row (Compact Inline Row) -->
+      <div class="flex flex-wrap items-end gap-x-4 gap-y-2 w-full text-xs">
+        <div class="flex items-end min-w-[140px] flex-grow">
           <span class="font-bold shrink-0">Ruta:</span>
-          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[24px] flex items-end">
-            <select id="input-ruta" required class="edit-field w-full bg-transparent text-black outline-none px-1 font-medium cursor-pointer appearance-none pb-0.5">
+          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+            <select id="input-ruta" required class="edit-field w-full bg-transparent text-black outline-none px-1 font-medium cursor-pointer appearance-none">
               <option value="">____________________</option>
               <option value="EL ROCÍO">EL ROCÍO</option>
               <option value="PAQUISHA">PAQUISHA</option>
@@ -259,55 +239,55 @@
           </div>
         </div>
 
-        <div class="flex items-end w-28 shrink-0">
+        <div class="flex items-end w-20 shrink-0">
           <span class="font-bold shrink-0">Unidad:</span>
-          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[24px] flex items-end">
-            <input type="number" id="input-unidad" required class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium pb-0.5">
+          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+            <input type="number" id="input-unidad" required class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
             <span id="preview-unidad" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
           </div>
         </div>
 
-        <div class="flex items-end w-28 shrink-0">
+        <div class="flex items-end w-20 shrink-0">
           <span class="font-bold shrink-0">Codigo:</span>
-          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[24px] flex items-end">
-            <input type="number" id="input-codigo" required oninput="limitDigits(this, 4)" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium pb-0.5">
+          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+            <input type="number" id="input-codigo" required oninput="limitDigits(this, 4)" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
             <span id="preview-codigo" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
           </div>
         </div>
 
-        <div class="flex items-end w-36 shrink-0">
+        <div class="flex items-end w-28 shrink-0">
           <span class="font-bold shrink-0">Km Inicial:</span>
-          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[24px] flex items-end">
-            <input type="number" id="input-kminicial" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium pb-0.5">
+          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+            <input type="number" id="input-kminicial" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
             <span id="preview-kminicial" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
           </div>
         </div>
 
-        <div class="flex items-end w-36 shrink-0">
+        <div class="flex items-end w-28 shrink-0">
           <span class="font-bold shrink-0">Km Final:</span>
-          <div class="underline-container border-b border-black w-full ml-1.5 min-h-[24px] flex items-end">
-            <input type="number" id="input-kmfinal" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium pb-0.5">
+          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+            <input type="number" id="input-kmfinal" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
             <span id="preview-kmfinal" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Responsive Grid for Tables (Apilado en móvil, paralelo en export/print/pantalla grande) -->
-    <div id="tablas-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start mb-6">
+    <!-- Side-by-side Tables Grid (Always side-by-side on all screens) -->
+    <div id="tablas-container" class="grid grid-cols-12 gap-x-2 sm:gap-x-6 items-start mb-4">
       
-      <!-- Table Left: Ingresos (Alineada y adaptable en móvil) -->
-      <div class="w-full overflow-x-auto">
-        <table class="w-full min-w-[340px] border-2 border-black text-center text-xs font-bold border-collapse">
+      <!-- Table Left: Ingresos -->
+      <div class="col-span-7 overflow-visible">
+        <table class="w-full border-2 border-black text-center text-[10px] sm:text-xs font-bold border-collapse">
           <thead>
             <tr class="border-b-2 border-black">
-              <th colspan="4" class="py-1.5 text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
+              <th colspan="4" class="py-1 text-xs uppercase font-bold tracking-wide"><span>Ingresos</span></th>
             </tr>
-            <tr class="border-b-2 border-black text-xxs">
-              <th class="border-r border-black py-1 w-14"><span>Vuelta</span></th>
-              <th class="border-r border-black py-1"><span>$ Bajada</span></th>
-              <th class="border-r border-black py-1"><span>$ Subida</span></th>
-              <th class="py-1 w-20"><span>$ Total</span></th>
+            <tr class="border-b-2 border-black text-[9px] sm:text-xxs">
+              <th class="border-r border-black py-0.5 w-6 sm:w-10"><span>Vuelta</span></th>
+              <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
+              <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
+              <th class="py-0.5 w-14 sm:w-20"><span>$ Total</span></th>
             </tr>
           </thead>
           <tbody>
@@ -315,32 +295,32 @@
               for (let i = 1; i <= 6; i++) {
                 document.write(`
                   <tr class="border-b border-black">
-                    <td class="border-r border-black py-1 font-bold">${i}</td>
-                    <td class="border-r border-black p-0 h-7">
-                      <input type="number" step="0.01" id="ing-bajada-${i}" oninput="calculateIngresos(${i})" class="w-full h-full bg-transparent text-center outline-none">
+                    <td class="border-r border-black py-0.5 font-bold">${i}</td>
+                    <td class="border-r border-black p-0">
+                      <input type="number" step="0.01" id="ing-bajada-${i}" oninput="calculateIngresos(${i})">
                     </td>
-                    <td class="border-r border-black p-0 h-7">
-                      <input type="number" step="0.01" id="ing-subida-${i}" oninput="calculateIngresos(${i})" class="w-full h-full bg-transparent text-center outline-none">
+                    <td class="border-r border-black p-0">
+                      <input type="number" step="0.01" id="ing-subida-${i}" oninput="calculateIngresos(${i})">
                     </td>
-                    <td class="py-1 text-center font-bold" id="ing-total-${i}"><div class="valor-centrado">0.00</div></td>
+                    <td class="text-center font-bold" id="ing-total-${i}"><div class="valor-centrado text-[10px] sm:text-xs">0.00</div></td>
                   </tr>
                 `);
               }
             </script>
             <tr class="border-0">
-              <td colspan="3" style="border: none !important;" class="text-right pr-2 py-2 font-bold text-xs">
-                <div style="justify-content: flex-end !important; padding-right: 12px !important; width: 100% !important; white-space: nowrap !important;">Total Ingresos</div>
+              <td colspan="3" style="border: none !important;" class="text-right pr-1 py-1 font-bold text-[10px] sm:text-xs">
+                <div style="justify-content: flex-end !important; padding-right: 4px !important; width: 100% !important; white-space: nowrap !important;">Total Ingresos</div>
               </td>
-              <td style="border: 2px solid #000000 !important;" class="h-7 p-0">
-                <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-total-ingresos">0.00</div>
+              <td style="border: 2px solid #000000 !important;" class="p-0">
+                <div class="w-full h-full font-bold flex items-center justify-center text-[10px] sm:text-xs" id="lbl-total-ingresos">0.00</div>
               </td>
             </tr>
             <tr class="border-0">
-              <td colspan="2" style="border: none !important;" class="text-right pr-2 py-2 font-bold text-xs">
-                <div style="justify-content: flex-end !important; padding-right: 12px !important; width: 100% !important; white-space: nowrap !important;">( INGRESOS – GASTOS ) DEPOSITO</div>
+              <td colspan="2" style="border: none !important;" class="text-right pr-1 py-1 font-bold text-[10px] sm:text-xs">
+                <div style="justify-content: flex-end !important; padding-right: 4px !important; width: 100% !important; white-space: nowrap !important;">( INGRESOS – GASTOS ) DEPOSITO</div>
               </td>
-              <td colspan="2" style="border: 2px solid #000000 !important;" class="h-7 p-0">
-                <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-deposito">0.00</div>
+              <td colspan="2" style="border: 2px solid #000000 !important;" class="p-0">
+                <div class="w-full h-full font-bold flex items-center justify-center text-[10px] sm:text-xs" id="lbl-deposito">0.00</div>
               </td>
             </tr>
           </tbody>
@@ -348,81 +328,79 @@
       </div>
 
       <!-- Table Right: Gastos -->
-      <div class="w-full overflow-x-auto flex flex-col">
-        <table class="table-custom-gastos w-full min-w-[340px] border-2 border-black text-center text-xs font-bold border-collapse">
+      <div class="col-span-5 overflow-visible">
+        <table class="table-custom-gastos w-full border-2 border-black text-center text-[10px] sm:text-xs font-bold border-collapse">
           <thead>
             <tr class="border-b-2 border-black">
-              <th colspan="2" class="py-1.5 text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
+              <th colspan="2" class="py-1 text-xs uppercase font-bold tracking-wide"><span>Gastos</span></th>
             </tr>
-            <tr class="border-b-2 border-black text-xxs">
-              <th class="border-r border-black py-1"><span>Descripcion</span></th>
-              <th class="py-1 w-28"><span>Valor</span></th>
+            <tr class="border-b-2 border-black text-[9px] sm:text-xxs">
+              <th class="border-r border-black py-0.5"><span>Descripcion</span></th>
+              <th class="py-0.5 w-16 sm:w-28"><span>Valor</span></th>
             </tr>
           </thead>
           <tbody>
-            <!-- prefilled row templates -->
             <tr id="gas-row-1" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
-                <div class="valor-centrado">Combustible</div>
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
+                <div class="valor-centrado text-[10px] sm:text-xs">Combustible</div>
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-1" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-2" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
-                <div class="valor-centrado">Conductor</div>
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
+                <div class="valor-centrado text-[10px] sm:text-xs">Conductor</div>
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-2" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-3" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
-                <div class="valor-centrado">Ayudante</div>
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
+                <div class="valor-centrado text-[10px] sm:text-xs">Ayudante</div>
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-3" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-4" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
-                <div class="valor-centrado">Mecánica</div>
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
+                <div class="valor-centrado text-[10px] sm:text-xs">Mecánica</div>
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-4" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-5" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
-                <div class="valor-centrado">Parqueadero</div>
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
+                <div class="valor-centrado text-[10px] sm:text-xs">Parqueadero</div>
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-5" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-6" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
                 <input type="text" id="gas-desc-6" placeholder="Otro gasto...">
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-6" oninput="calculateGastos()">
               </td>
             </tr>
             <tr id="gas-row-7" class="border-b border-black">
-              <td class="border-r border-black p-0 h-7 text-left px-3">
+              <td class="border-r border-black p-0 text-left px-2 sm:px-3">
                 <input type="text" id="gas-desc-7" placeholder="Otro gasto...">
               </td>
-              <td class="p-0 h-7">
+              <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-7" oninput="calculateGastos()">
               </td>
             </tr>
-            <!-- Totals row -->
             <tr class="border-0">
-              <td style="border: none !important;" class="text-right pr-2 py-2 font-bold text-xs">
-                <div style="justify-content: flex-end !important; padding-right: 12px !important; width: 100% !important; white-space: nowrap !important;">Total Gastos</div>
+              <td style="border: none !important;" class="text-right pr-1 py-1 font-bold text-[10px] sm:text-xs">
+                <div style="justify-content: flex-end !important; padding-right: 4px !important; width: 100% !important; white-space: nowrap !important;">Total Gastos</div>
               </td>
-              <td style="border: 2px solid #000000 !important; width: 112px !important;" class="h-7 p-0 w-28">
+              <td style="border: 2px solid #000000 !important; width: 112px !important;" class="p-0 w-16 sm:w-28">
                 <input type="number" id="total-gastos" readonly value="0.00">
               </td>
             </tr>
@@ -432,7 +410,7 @@
     </div>
 
     <!-- Crew / Signatures Section -->
-    <div class="mt-8 text-sm">
+    <div class="mt-4 text-xs sm:text-sm">
       <div id="crew-headers" class="hidden md:grid grid-cols-12 gap-x-6 mb-2 text-center font-bold text-xs">
         <div class="col-span-3"></div>
         <div class="col-span-3">Conductor Principal</div>
@@ -444,41 +422,41 @@
       <div class="grid-responsive-crew items-end mb-4">
         <div class="col-span-3 font-bold text-xs pb-1 md:block hidden">Nombres</div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1">Nombres - Conductor Principal:</span>
-          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-cond-principal" placeholder="Conductor Principal..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-cond-principal" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+          <span class="block md:hidden font-bold text-[10px] pb-0.5">Nombres - Conductor Principal:</span>
+          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 24px;">
+            <input type="text" id="input-cond-principal" placeholder="Conductor Principal..." class="edit-field w-full bg-transparent text-black outline-none px-1 text-xs">
+            <span id="preview-cond-principal" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
           </div>
         </div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1">Nombres - Conductor Alterno:</span>
-          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-cond-alterno" placeholder="Conductor Alterno..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-cond-alterno" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+          <span class="block md:hidden font-bold text-[10px] pb-0.5">Nombres - Conductor Alterno:</span>
+          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 24px;">
+            <input type="text" id="input-cond-alterno" placeholder="Conductor Alterno..." class="edit-field w-full bg-transparent text-black outline-none px-1 text-xs">
+            <span id="preview-cond-alterno" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
           </div>
         </div>
         <div class="col-span-3">
-          <span class="block md:hidden font-bold text-xs pb-1">Nombres - Ayudante:</span>
-          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 28px;">
-            <input type="text" id="input-ayudante" placeholder="Ayudante..." class="edit-field w-full bg-transparent text-black outline-none px-1 pb-0.5">
-            <span id="preview-ayudante" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left"></span>
+          <span class="block md:hidden font-bold text-[10px] pb-0.5">Nombres - Ayudante:</span>
+          <div class="underline-container border-b border-black w-full flex items-end pb-1" style="min-height: 24px;">
+            <input type="text" id="input-ayudante" placeholder="Ayudante..." class="edit-field w-full bg-transparent text-black outline-none px-1 text-xs">
+            <span id="preview-ayudante" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
           </div>
         </div>
       </div>
 
       <!-- Firma Row with image upload option for each role -->
-      <div class="grid-responsive-crew items-end mb-6">
+      <div class="grid-responsive-crew items-end mb-4">
         <div class="col-span-3 font-bold text-xs pb-3 md:block hidden">Firma</div>
         
         <!-- Conductor Principal Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Conductor Principal:</span>
-          <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-principal" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Principal">
+        <div class="col-span-3 text-center mb-2 md:mb-0">
+          <span class="block md:hidden font-bold text-[10px] pb-0.5 text-left">Firma - Conductor Principal:</span>
+          <div class="flex flex-col items-center justify-end h-16 w-full relative">
+            <img id="sig-img-principal" class="hidden max-h-12 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Principal">
             <div class="w-full border-b border-black"></div>
           </div>
           <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
+            <label class="cursor-pointer text-[9px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
               Subir Firma
               <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-principal')">
             </label>
@@ -486,14 +464,14 @@
         </div>
 
         <!-- Conductor Alterno Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Conductor Alterno:</span>
-          <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-alterno" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Alterno">
+        <div class="col-span-3 text-center mb-2 md:mb-0">
+          <span class="block md:hidden font-bold text-[10px] pb-0.5 text-left">Firma - Conductor Alterno:</span>
+          <div class="flex flex-col items-center justify-end h-16 w-full relative">
+            <img id="sig-img-alterno" class="hidden max-h-12 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Conductor Alterno">
             <div class="w-full border-b border-black"></div>
           </div>
           <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
+            <label class="cursor-pointer text-[9px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
               Subir Firma
               <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-alterno')">
             </label>
@@ -501,14 +479,14 @@
         </div>
 
         <!-- Ayudante Signature Box -->
-        <div class="col-span-3 text-center mb-4 md:mb-0">
-          <span class="block md:hidden font-bold text-xs pb-1 text-left">Firma - Ayudante:</span>
-          <div class="flex flex-col items-center justify-end h-20 w-full relative">
-            <img id="sig-img-ayudante" class="hidden max-h-16 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Ayudante">
+        <div class="col-span-3 text-center mb-2 md:mb-0">
+          <span class="block md:hidden font-bold text-[10px] pb-0.5 text-left">Firma - Ayudante:</span>
+          <div class="flex flex-col items-center justify-end h-16 w-full relative">
+            <img id="sig-img-ayudante" class="hidden max-h-12 max-w-full object-contain mb-1 absolute bottom-1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Firma Ayudante">
             <div class="w-full border-b border-black"></div>
           </div>
           <div class="no-print-sig no-print mt-1">
-            <label class="cursor-pointer text-[10px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
+            <label class="cursor-pointer text-[9px] bg-black text-white px-2 py-0.5 border border-black hover:bg-neutral-800 transition block text-center font-bold">
               Subir Firma
               <input type="file" accept="image/*" class="hidden" onchange="uploadSignature(this, 'sig-img-ayudante')">
             </label>
@@ -517,20 +495,20 @@
       </div>
 
       <!-- Bottom Details Block (Novedades, Estación, Nombre Despacho) -->
-      <div class="space-y-4 mt-6">
+      <div class="space-y-3 mt-4 text-xs">
         <!-- Row 1: Mechanical News / Fuel Station -->
-        <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
+        <div class="flex flex-wrap lg:flex-nowrap items-end gap-4 w-full">
           <div class="flex items-end w-full lg:w-[50%] shrink-0">
             <span class="font-bold shrink-0">Novedades Mecanicas:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <input type="text" id="input-nov-mecanicas" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
-              <span id="preview-nov-mecanicas" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[24px] flex items-end pb-0.5">
+              <input type="text" id="input-nov-mecanicas" class="edit-field w-full bg-transparent text-black outline-none px-1 text-xs">
+              <span id="preview-nov-mecanicas" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
             </div>
           </div>
           <div class="flex items-end flex-grow">
             <span class="font-bold shrink-0">Lugar/Estacion Combustible:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <select id="input-lugar-combustible" onchange="checkCustomStation(this.value)" class="edit-field w-full bg-transparent text-black outline-none px-2 cursor-pointer appearance-none pb-0.5">
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[24px] flex items-end pb-0.5">
+              <select id="input-lugar-combustible" onchange="checkCustomStation(this.value)" class="edit-field w-full bg-transparent text-black outline-none px-1 cursor-pointer appearance-none text-xs">
                 <option value="">____________________</option>
                 <option value="Estacion P & S (Frente Transplaneta)">Estacion P & S (Frente Transplaneta)</option>
                 <option value="Petrocomercial Nueva Aurora(Av.Mariscal)">Petrocomercial Nueva Aurora(Av.Mariscal)</option>
@@ -540,36 +518,36 @@
                 <option value="Otra Estacion">Otra Estacion</option>
                 <option value="No Tanquea">No Tanquea</option>
               </select>
-              <input type="text" id="input-custom-station" placeholder="Especificar estación..." class="edit-field hidden bg-transparent text-black outline-none px-2 ml-2 w-48 text-xs border border-gray-400 pb-0.5">
-              <span id="preview-lugar-combustible" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left text-xs sm:text-sm"></span>
+              <input type="text" id="input-custom-station" placeholder="Especificar..." class="edit-field hidden bg-transparent text-black outline-none px-1 ml-1 w-24 text-[10px] border border-gray-400">
+              <span id="preview-lugar-combustible" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
             </div>
           </div>
         </div>
 
         <!-- Row 2: Operational News / Dispatch name -->
-        <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
+        <div class="flex flex-wrap lg:flex-nowrap items-end gap-4 w-full">
           <div class="flex items-end w-full lg:w-[68%] shrink-0">
-            <span class="font-bold shrink-0 text-xs sm:text-sm">Novedades Operacionales o Fiscalizaciones:</span>
-            <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
-              <input type="text" id="input-nov-operacionales" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
-              <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
+            <span class="font-bold shrink-0">Novedades Operacionales o Fiscalizaciones:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[24px] flex items-end pb-0.5">
+              <input type="text" id="input-nov-operacionales" class="edit-field w-full bg-transparent text-black outline-none px-1 text-xs">
+              <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-1 w-full block text-left text-xs"></span>
             </div>
           </div>
-          <div class="flex flex-col flex-grow text-center justify-end h-[52px]">
-            <span class="font-bold text-xs pb-1 shrink-0">Nombre Despacho</span>
-            <div class="underline-container border-b border-black w-full min-h-[28px] flex items-end justify-center pb-1">
-              <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-2 text-center cursor-pointer appearance-none pb-0.5">
+          <div class="flex flex-col flex-grow text-center justify-end h-[48px]">
+            <span class="font-bold text-xs pb-0.5 shrink-0">Nombre Despacho</span>
+            <div class="underline-container border-b border-black w-full min-h-[24px] flex items-end justify-center pb-0.5">
+              <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none text-xs">
                 <option value="">____________________</option>
                 <option value="Andrea Trujillo">Andrea Trujillo</option>
                 <option value="César Lluco">César Lluco</option>
               </select>
-              <span id="preview-nombre-despacho" class="preview-field campo-linea hidden font-normal px-2 text-center w-full block"></span>
+              <span id="preview-nombre-despacho" class="preview-field campo-linea hidden font-normal px-1 text-center w-full block text-xs"></span>
             </div>
           </div>
         </div>
 
         <!-- Bottom Page Divider -->
-        <div class="pt-6">
+        <div class="pt-4">
           <div class="border-t-[3px] border-black w-full"></div>
         </div>
       </div>
@@ -641,7 +619,7 @@
       const subida = parseFloat(document.getElementById(`ing-subida-${index}`).value) || 0;
       const totalCell = document.getElementById(`ing-total-${index}`);
       
-      totalCell.innerHTML = `<div class="valor-centrado">${(bajada + subida).toFixed(2)}</div>`;
+      totalCell.innerHTML = `<div class="valor-centrado text-[10px] sm:text-xs">${(bajada + subida).toFixed(2)}</div>`;
       recomputeGrandTotals();
     }
 
@@ -712,7 +690,7 @@
           const valor = input.value || "";
           celda.innerHTML = ""; 
           if (valor !== "") {
-            celda.innerHTML = `<span class="valor-centrado">${parseFloat(valor) ? parseFloat(valor).toFixed(2) : valor}</span>`;
+            celda.innerHTML = `<span class="valor-centrado text-[10px] sm:text-xs">${parseFloat(valor) ? parseFloat(valor).toFixed(2) : valor}</span>`;
           } else {
             celda.innerHTML = `<span>&nbsp;</span>`;
           }
