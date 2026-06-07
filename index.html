@@ -197,6 +197,7 @@
             <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer">
             <span id="display-date" class="preview-field campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs"></span>
           </div>
+          <span id="lbl-day-name" class="edit-field text-xs font-bold text-amber-600 ml-2"></span>
         </div>
         
         <!-- Ruta, Unidad, Codigo, Km Row -->
@@ -617,9 +618,11 @@
     // Date synchronizer logic
     function syncDate(dateVal) {
       const displaySpan = document.getElementById("display-date");
+      const dayLabel = document.getElementById("lbl-day-name");
       
       if (!dateVal) {
         displaySpan.innerText = "";
+        if (dayLabel) dayLabel.innerText = "";
         return;
       }
       
@@ -633,6 +636,9 @@
       const yyyy = dateObj.getFullYear();
 
       displaySpan.innerText = `${dayName} ${dd}/${mm}/${yyyy}`;
+      if (dayLabel) {
+        dayLabel.innerText = dayName;
+      }
     }
 
     // Dynamic calculations
