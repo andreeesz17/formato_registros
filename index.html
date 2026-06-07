@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=900, user-scalable=yes">
   <title>Coop. Transur "7 de Mayo" - Registro de Trabajo Diario</title>
   
   <!-- Tailwind CSS CDN -->
@@ -178,10 +178,8 @@
     </div>
   </div>
 
-  <!-- SHEET SCALER TO FIT SCREEN ON MOBILE -->
-  <div id="sheet-scaler" class="w-full flex justify-center overflow-hidden pb-6">
-    <!-- MAIN SHEET CONTAINER -->
-    <div id="hoja-registro" class="w-[900px] mx-auto bg-white p-6 text-black border border-gray-300 shadow-lg origin-top shrink-0">
+  <!-- MAIN SHEET CONTAINER -->
+  <div id="hoja-registro" class="w-[900px] mx-auto bg-white p-6 text-black border border-gray-300 shadow-lg pb-6">
       
       <!-- Title Header -->
       <div class="text-center mb-6">
@@ -579,7 +577,6 @@
       </div>
     </div>
   </div>
-</div>
 
   <!-- GALLERY DOWNLOAD OVERLAY MODAL (For mobile users to easily save to photos) -->
   <div id="modal-galeria" class="hidden fixed inset-0 bg-black/80 flex flex-col items-center justify-center p-4 z-50 no-print">
@@ -825,47 +822,7 @@
         document.getElementById("btn-toggle-preview").setAttribute("onclick", "togglePreview(true)");
         document.getElementById("btn-toggle-preview").classList.replace("bg-emerald-500", "bg-amber-500");
       }
-      // Reajustar escala del lienzo al cambiar de modo
-      setTimeout(adjustScale, 50);
     }
-
-    // Función para auto-ajustar el tamaño del lienzo en celulares (Zoom out a toda la hoja)
-    function adjustScale() {
-      // Evitar re-escalar mientras se escribe para que el teclado virtual de móvil no rompa el diseño
-      if (document.activeElement && 
-          (document.activeElement.tagName === "INPUT" || 
-           document.activeElement.tagName === "SELECT" || 
-           document.activeElement.tagName === "TEXTAREA")) {
-        return;
-      }
-
-      const container = document.getElementById("sheet-scaler");
-      const sheet = document.getElementById("hoja-registro");
-      if (!container || !sheet) return;
-
-      const containerWidth = container.clientWidth;
-      const baseWidth = 900;
-
-      if (containerWidth < baseWidth) {
-        const scale = containerWidth / baseWidth;
-        sheet.style.transform = `scale(${scale})`;
-        sheet.style.transformOrigin = "top center";
-        
-        // Ajustamos la altura del contenedor con cálculo matemático estable
-        const scaledHeight = sheet.offsetHeight * scale;
-        container.style.height = `${scaledHeight}px`;
-      } else {
-        sheet.style.transform = "";
-        sheet.style.transformOrigin = "";
-        container.style.height = "";
-      }
-    }
-
-    window.addEventListener("load", adjustScale);
-    window.addEventListener("resize", adjustScale);
-    document.addEventListener("focusout", () => {
-      setTimeout(adjustScale, 200);
-    });
 
     function cerrarModalGaleria() {
       document.getElementById("modal-galeria").classList.add("hidden");
