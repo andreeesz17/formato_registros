@@ -584,6 +584,22 @@
     </div>
   </div>
 
+  <!-- GALLERY DOWNLOAD OVERLAY MODAL (For mobile users to easily save to photos) -->
+  <div id="modal-galeria" class="hidden fixed inset-0 bg-black/80 flex flex-col items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white border border-black p-4 max-w-sm w-full text-center space-y-4 shadow-xl">
+      <div class="text-xs font-bold uppercase tracking-wider text-amber-600">Listo para Guardar</div>
+      <p class="text-[11px] text-gray-600 leading-normal">
+        Para guardar en tu galería, mantén presionada la imagen de abajo y selecciona <strong>"Guardar en Fotos"</strong> o <strong>"Descargar imagen"</strong>.
+      </p>
+      <div class="border border-black max-h-[300px] overflow-y-auto">
+        <img id="img-modal-preview" class="w-full object-contain" src="" alt="Vista previa de registro">
+      </div>
+      <button onclick="cerrarModalGaleria()" class="w-full bg-black text-white py-2 text-xs font-bold uppercase border border-black hover:bg-neutral-800 transition">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT SYSTEM LOGIC -->
   <script>
     // Max digits constraint on numerical code inputs
@@ -841,9 +857,10 @@
       }
     }
 
-    // ----------------------------------------------------
-    // EXPORT HANDLERS
-    // ----------------------------------------------------
+    function cerrarModalGaleria() {
+      document.getElementById("modal-galeria").classList.add("hidden");
+    }
+
     function checkLibrary(libName) {
       if (libName === 'html2pdf' && typeof html2pdf === 'undefined') {
         alert("La librería para generar PDFs no se ha cargado.");
@@ -866,21 +883,30 @@
         const wasInEdit = !document.getElementById("hoja-registro").classList.contains("preview-mode");
         if (wasInEdit) togglePreview(true);
 
-        const opt = {
-          margin: [0, 0, 0, 0],
-          filename: 'registro_trabajo_diario.pdf',
-          image: { type: 'jpeg', quality: 1 },
-          html2canvas: { scale: 3, useCORS: true },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
+        setTimeout(() => {
+          const opt = {
+            margin: [0, 0, 0, 0],
+            filename: `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`,
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { 
+              scale: 3, 
+              useCORS: true,
+              width: 794,
+              height: 1123,
+              windowWidth: 794,
+              windowHeight: 1123
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
 
-        const element = document.getElementById("hoja-registro");
-        html2pdf().set(opt).from(element).save().then(() => {
-          if (wasInEdit) togglePreview(false);
-        }).catch(err => {
-          alert("Error durante la generación del PDF: " + err.message);
-          if (wasInEdit) togglePreview(false);
-        });
+          const element = document.getElementById("hoja-registro");
+          html2pdf().set(opt).from(element).save().then(() => {
+            if (wasInEdit) togglePreview(false);
+          }).catch(err => {
+            alert("Error durante la generación del PDF: " + err.message);
+            if (wasInEdit) togglePreview(false);
+          });
+        }, 100);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar PDF: " + error.message);
       }
@@ -892,21 +918,43 @@
         const wasInEdit = !document.getElementById("hoja-registro").classList.contains("preview-mode");
         if (wasInEdit) togglePreview(true);
 
-        const element = document.getElementById("hoja-registro");
-        html2canvas(element, {
-          scale: 3,
-          useCORS: true,
-          backgroundColor: "#ffffff"
-        }).then(canvas => {
-          const link = document.createElement("a");
-          link.download = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-          if (wasInEdit) togglePreview(false);
-        }).catch(err => {
-          alert("Error durante la generación de la imagen: " + err.message);
-          if (wasInEdit) togglePreview(false);
-        });
+        setTimeout(() => {
+          const element = document.getElementById("hoja-registro");
+          html2canvas(element, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            width: 794,
+            height: 1123,
+            windowWidth: 794,
+            windowHeight: 1123
+          }).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            
+            // Configurar vista previa en el modal
+            const previewImg = document.getElementById("img-modal-preview");
+            if (previewImg) {
+              previewImg.src = imgData;
+            }
+            
+            // Mostrar modal de galería para móviles
+            const modal = document.getElementById("modal-galeria");
+            if (modal) {
+              modal.classList.remove("hidden");
+            }
+
+            // Descarga automática en desktop
+            const link = document.createElement("a");
+            link.download = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
+            link.href = imgData;
+            link.click();
+
+            if (wasInEdit) togglePreview(false);
+          }).catch(err => {
+            alert("Error durante la generación de la imagen: " + err.message);
+            if (wasInEdit) togglePreview(false);
+          });
+        }, 100);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar Imagen: " + error.message);
       }
