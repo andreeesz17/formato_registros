@@ -391,14 +391,12 @@
                   <input type="number" step="0.01" id="gas-valor-7" oninput="calculateGastos()">
                 </td>
               </tr>
-              <tr class="border-0">
-                <td style="border: none !important;" class="text-right pr-1 py-1 font-bold text-xs">
-                  <div style="justify-content: flex-end !important; padding-right: 8px !important; width: 100% !important; white-space: nowrap !important;">
-                    <span class="hidden sm:inline-block">Total Gastos</span>
-                    <span class="inline-block sm:hidden">Total (-)</span>
-                  </div>
+              <tr>
+                <td class="text-right pr-2 font-bold text-xs">
+                  <span class="hidden sm:inline-block">Total Gastos</span>
+                  <span class="inline-block sm:hidden">Total (-)</span>
                 </td>
-                <td style="border: 2px solid #000000 !important; width: 112px !important;" class="p-0 w-20 sm:w-28">
+                <td class="p-0">
                   <input type="number" id="total-gastos" readonly value="0.00">
                 </td>
               </tr>
@@ -568,7 +566,7 @@
             <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
           </div>
         </div>
-        <div class="flex flex-col flex-grow text-center justify-end h-[52px]">
+        <div class="flex flex-col items-center justify-end flex-grow min-w-[200px]">
           <span class="font-bold text-xs pb-1 shrink-0">Nombre Despacho</span>
           <div class="underline-container border-b border-black w-full min-h-[28px] flex items-end justify-center pb-1">
             <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none pb-0.5 text-xs">
@@ -741,6 +739,20 @@
           }
         }
       });
+
+      // Limpiar celda de descripción en Gastos si el valor correspondiente está vacío
+      for (let i = 1; i <= 7; i++) {
+        const valInput = document.getElementById(`gas-valor-${i}`);
+        if (valInput && valInput.value.trim() === "") {
+          const row = document.getElementById(`gas-row-${i}`);
+          if (row) {
+            const descCell = row.querySelector('td:first-child');
+            if (descCell) {
+              descCell.innerHTML = `<span>&nbsp;</span>`;
+            }
+          }
+        }
+      }
     }
 
     function desactivarVistaPrevia() {
@@ -931,16 +943,16 @@
           let tot = i <= 6 ? bj + sb : "";
 
           let desc = "";
-          let val = 0;
+          let val = parseFloat(document.getElementById(`gas-valor-${i}`).value) || 0;
           
-          if (i <= 5) {
-            const fixedDescs = ["Combustible", "Conductor", "Ayudante", "Mecánica", "Parqueadero"];
-            desc = fixedDescs[i - 1];
-            val = parseFloat(document.getElementById(`gas-valor-${i}`).value) || 0;
-          } else {
-            const descInput = document.getElementById(`gas-desc-${i}`);
-            desc = descInput ? descInput.value : "";
-            val = parseFloat(document.getElementById(`gas-valor-${i}`).value) || 0;
+          if (val > 0) {
+            if (i <= 5) {
+              const fixedDescs = ["Combustible", "Conductor", "Ayudante", "Mecánica", "Parqueadero"];
+              desc = fixedDescs[i - 1];
+            } else {
+              const descInput = document.getElementById(`gas-desc-${i}`);
+              desc = descInput ? descInput.value : "";
+            }
           }
 
           data.push([
