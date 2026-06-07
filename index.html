@@ -713,6 +713,13 @@
 
     function activarVistaPrevia() {
       saveEdicionState();
+
+      // Guardamos los valores de los inputs de gastos ANTES de que se borren del DOM
+      const gastoValues = [];
+      for (let i = 1; i <= 7; i++) {
+        const valInput = document.getElementById(`gas-valor-${i}`);
+        gastoValues[i] = valInput ? valInput.value.trim() : "";
+      }
       
       document.getElementById('hoja-registro').classList.add('preview-mode');
       
@@ -730,10 +737,9 @@
         }
       });
 
-      // Limpieza de filas vacías para Gastos
+      // Limpieza de filas vacías para Gastos usando los valores guardados
       for (let i = 1; i <= 7; i++) {
-        const valInput = document.getElementById(`gas-valor-${i}`);
-        const val = valInput ? valInput.value.trim() : "";
+        const val = gastoValues[i];
         if (val === "") {
           const row = document.getElementById(`gas-row-${i}`);
           if (row) {
