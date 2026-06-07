@@ -112,8 +112,9 @@
     }
 
     /* Bottom lines - Span styling to prevent line collisions (descenders like g, j, p) */
-    .preview-mode span, 
-    .preview-mode div span,
+    .preview-mode .underline-container span,
+    .preview-mode .campo-linea,
+    .preview-mode .campo-linea-despacho,
     .preview-mode #txt-fecha,
     .preview-mode #txt-ruta {
       display: inline-block !important;
@@ -124,8 +125,7 @@
       box-sizing: border-box !important;
     }
 
-    .preview-mode .border-b,
-    .preview-mode [class*="border-b"] {
+    .preview-mode .underline-container {
       display: flex !important;
       align-items: flex-end !important;
       min-height: 28px !important;
