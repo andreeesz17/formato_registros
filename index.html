@@ -197,7 +197,7 @@
           <span class="font-bold shrink-0">Fecha:</span>
           <div class="underline-container relative w-48 ml-2 border-b border-black min-h-[20px] flex items-end">
             <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer">
-            <span id="display-date" onclick="editDate()" class="campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer"></span>
+            <span id="display-date" class="preview-field campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs"></span>
           </div>
         </div>
         
@@ -620,12 +620,9 @@
     // Date synchronizer logic
     function syncDate(dateVal) {
       const displaySpan = document.getElementById("display-date");
-      const dateInput = document.getElementById("input-date");
       
       if (!dateVal) {
         displaySpan.innerText = "";
-        displaySpan.classList.add("hidden");
-        dateInput.classList.remove("hidden");
         return;
       }
       
@@ -639,21 +636,6 @@
       const yyyy = dateObj.getFullYear();
 
       displaySpan.innerText = `${dayName} ${dd}/${mm}/${yyyy}`;
-      dateInput.classList.add("hidden");
-      displaySpan.classList.remove("hidden");
-    }
-
-    // Return to Date Input on tap
-    function editDate() {
-      const isPreview = document.getElementById("hoja-registro").classList.contains("preview-mode");
-      if (isPreview) return;
-
-      const displaySpan = document.getElementById("display-date");
-      const dateInput = document.getElementById("input-date");
-      
-      displaySpan.classList.add("hidden");
-      dateInput.classList.remove("hidden");
-      dateInput.focus();
     }
 
     // Dynamic calculations
@@ -825,9 +807,6 @@
 
         activarVistaPrevia();
 
-        document.getElementById("input-date").classList.add("hidden");
-        document.getElementById("display-date").classList.remove("hidden");
-
         document.querySelectorAll(".edit-field").forEach(el => el.classList.add("hidden"));
         document.querySelectorAll(".preview-field").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".no-print-sig").forEach(el => el.classList.add("hidden"));
@@ -837,12 +816,6 @@
         document.getElementById("btn-toggle-preview").classList.replace("bg-amber-500", "bg-emerald-500");
       } else {
         desactivarVistaPrevia();
-
-        const dateVal = document.getElementById("input-date").value;
-        if (!dateVal) {
-          document.getElementById("input-date").classList.remove("hidden");
-          document.getElementById("display-date").classList.add("hidden");
-        }
 
         document.querySelectorAll(".edit-field").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".preview-field").forEach(el => el.classList.add("hidden"));
@@ -858,6 +831,14 @@
 
     // Función para auto-ajustar el tamaño del lienzo en celulares (Zoom out a toda la hoja)
     function adjustScale() {
+      // Evitar re-escalar mientras se escribe para que el teclado virtual de móvil no rompa el diseño
+      if (document.activeElement && 
+          (document.activeElement.tagName === "INPUT" || 
+           document.activeElement.tagName === "SELECT" || 
+           document.activeElement.tagName === "TEXTAREA")) {
+        return;
+      }
+
       const container = document.getElementById("sheet-scaler");
       const sheet = document.getElementById("hoja-registro");
       if (!container || !sheet) return;
@@ -870,8 +851,8 @@
         sheet.style.transform = `scale(${scale})`;
         sheet.style.transformOrigin = "top center";
         
-        // Ajustamos la altura del contenedor para evitar espacio en blanco vertical
-        const scaledHeight = sheet.getBoundingClientRect().height;
+        // Ajustamos la altura del contenedor con cálculo matemático estable
+        const scaledHeight = sheet.offsetHeight * scale;
         container.style.height = `${scaledHeight}px`;
       } else {
         sheet.style.transform = "";
@@ -882,6 +863,9 @@
 
     window.addEventListener("load", adjustScale);
     window.addEventListener("resize", adjustScale);
+    document.addEventListener("focusout", () => {
+      setTimeout(adjustScale, 200);
+    });
 
     function cerrarModalGaleria() {
       document.getElementById("modal-galeria").classList.add("hidden");
