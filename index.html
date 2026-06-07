@@ -56,15 +56,9 @@
     }
 
     /* Standard cell heights */
-    #hoja-registro table td {
+    #hoja-registro table td, #hoja-registro table th {
+      padding: 0 !important;
       height: 36px !important;
-      padding: 0 !important;
-      vertical-align: middle !important;
-    }
-
-    #hoja-registro table th {
-      height: 38px !important;
-      padding: 0 !important;
       vertical-align: middle !important;
     }
 
@@ -84,7 +78,7 @@
     /* Align description column left in Gastos Table */
     .table-custom-gastos td:first-child .valor-centrado {
       justify-content: flex-start !important;
-      padding-left: 10px !important;
+      padding-left: 12px !important;
     }
 
     /* Input styling inside tables (pill style for ultra-compact edit mode) */
@@ -107,12 +101,10 @@
     /* Custom gasto descriptions left-aligned during edit */
     .table-custom-gastos td:first-child input {
       text-align: left !important;
-      padding-left: 10px !important;
+      padding-left: 12px !important;
     }
 
-
-
-    /* In preview mode, remove pill styling and hide input elements inside tables */
+    /* In preview mode, hide input elements inside tables */
     .preview-mode table input, 
     .preview-mode table select, 
     .preview-mode table textarea {
@@ -120,16 +112,23 @@
     }
 
     /* Bottom lines - Span styling to prevent line collisions (descenders like g, j, p) */
-    .preview-mode .underline-container {
-      border-bottom: none !important;
+    .preview-mode span, 
+    .preview-mode div span,
+    .preview-mode #txt-fecha,
+    .preview-mode #txt-ruta {
+      display: inline-block !important;
+      padding-bottom: 5px !important; /* Eleva el texto 5px por encima de la línea */
+      margin-bottom: 1px !important;
+      vertical-align: bottom !important;
+      line-height: 1.1 !important;
+      box-sizing: border-box !important;
     }
 
-    .preview-mode .campo-linea {
-      display: inline-block !important;
-      border-bottom: 1px solid #000000 !important;
-      padding-bottom: 4px !important;
-      margin-bottom: -4px !important;
-      line-height: 1.2 !important;
+    .preview-mode .border-b,
+    .preview-mode [class*="border-b"] {
+      display: flex !important;
+      align-items: flex-end !important;
+      min-height: 28px !important;
     }
 
     /* If the preview span is empty, render a clean border-bottom line across the container */
@@ -152,7 +151,7 @@
         box-sizing: border-box !important;
         background: #ffffff !important;
       }
-      #tablas-container {
+      #tablas-grid-wrapper {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 1.5rem !important;
@@ -215,7 +214,6 @@
               <option value="">____________________</option>
               <option value="EL ROCÍO">EL ROCÍO</option>
               <option value="PAQUISHA">PAQUISHA</option>
-              <option value="ANILLO">ANILLO</option>
             </select>
             <span id="preview-ruta" class="preview-field campo-linea hidden font-medium px-1 w-full block text-left"></span>
           </div>
@@ -255,154 +253,141 @@
       </div>
     </div>
 
-    <!-- Side-by-side Tables Grid -->
-    <div class="w-full overflow-x-auto pb-2">
-      <div id="tablas-container" class="min-w-[580px] lg:min-w-0 grid grid-cols-12 gap-x-3 sm:gap-x-6 items-start mb-4">
-        
-        <!-- Table Left: Ingresos -->
-        <div class="col-span-7 overflow-visible">
-          <table class="w-full border-2 border-black text-center text-xs font-bold border-collapse">
-            <thead>
-              <tr class="border-b-2 border-black">
-                <th colspan="4" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
-              </tr>
-              <tr class="border-b-2 border-black text-xxs sm:text-xs">
-                <th class="border-r border-black py-0.5 w-10 sm:w-14">
-                  <span class="hidden sm:inline-block">Vuelta</span>
-                  <span class="inline-block sm:hidden">Vta.</span>
-                </th>
-                <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
-                <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
-                <th class="py-0.5 w-16 sm:w-20"><span>$ Total</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <script>
-                for (let i = 1; i <= 6; i++) {
-                  document.write(`
-                    <tr class="border-b border-black">
-                      <td class="border-r border-black py-0.5 font-bold">${i}</td>
-                      <td class="border-r border-black p-0">
-                        <input type="number" step="0.01" id="ing-bajada-${i}" oninput="calculateIngresos(${i})">
-                      </td>
-                      <td class="border-r border-black p-0">
-                        <input type="number" step="0.01" id="ing-subida-${i}" oninput="calculateIngresos(${i})">
-                      </td>
-                      <td class="text-center font-bold" id="ing-total-${i}"><div class="valor-centrado">0.00</div></td>
-                    </tr>
-                  `);
-                }
-              </script>
-              <tr class="border-0">
-                <td colspan="3" style="border: none !important;" class="text-right pr-1 py-1 font-bold text-xs">
-                  <div style="justify-content: flex-end !important; padding-right: 8px !important; width: 100% !important; white-space: nowrap !important;">
-                    <span class="hidden sm:inline-block">Total Ingresos</span>
-                    <span class="inline-block sm:hidden">Total (+)</span>
-                  </div>
-                </td>
-                <td style="border: 2px solid #000000 !important;" class="p-0">
-                  <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-total-ingresos">0.00</div>
-                </td>
-              </tr>
-              <tr class="border-0">
-                <td colspan="2" style="border: none !important;" class="text-right pr-1 py-1 font-bold text-xs">
-                  <div style="justify-content: flex-end !important; padding-right: 8px !important; width: 100% !important; white-space: nowrap !important;">
-                    <span class="hidden sm:inline-block">( INGRESOS – GASTOS ) DEPOSITO</span>
-                    <span class="inline-block sm:hidden">Dep. =</span>
-                  </div>
-                </td>
-                <td colspan="2" style="border: 2px solid #000000 !important;" class="p-0">
-                  <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-deposito">0.00</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <!-- Responsive Tables Container -->
+    <div id="tablas-grid-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-4">
+      
+      <!-- Table Left: Ingresos (w-full overflow-x-auto) -->
+      <div class="lg:col-span-7 w-full overflow-x-auto">
+        <table class="min-w-[600px] w-full border-2 border-black text-center text-xs font-bold border-collapse">
+          <thead>
+            <tr class="border-b-2 border-black">
+              <th colspan="4" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
+            </tr>
+            <tr class="border-b-2 border-black text-xxs sm:text-xs">
+              <th class="border-r border-black py-0.5 w-14">
+                <span>Vuelta</span>
+              </th>
+              <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
+              <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
+              <th class="py-0.5 w-20"><span>$ Total</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <script>
+              for (let i = 1; i <= 6; i++) {
+                document.write(`
+                  <tr class="border-b border-black">
+                    <td class="border-r border-black py-0.5 font-bold">${i}</td>
+                    <td class="border-r border-black p-0">
+                      <input type="number" step="0.01" id="ing-bajada-${i}" oninput="calculateIngresos(${i})">
+                    </td>
+                    <td class="border-r border-black p-0">
+                      <input type="number" step="0.01" id="ing-subida-${i}" oninput="calculateIngresos(${i})">
+                    </td>
+                    <td class="text-center font-bold" id="ing-total-${i}"><div class="valor-centrado">0.00</div></td>
+                  </tr>
+                `);
+              }
+            </script>
+            <tr class="border-0">
+              <td colspan="3" style="border: none !important;" class="text-right pr-2 py-1 font-bold text-xs">
+                Total Ingresos
+              </td>
+              <td style="border: 2px solid #000000 !important;" class="p-0">
+                <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-total-ingresos">0.00</div>
+              </td>
+            </tr>
+            <tr class="border-0">
+              <td colspan="2" style="border: none !important;" class="text-right pr-2 py-1 font-bold text-xs">
+                ( INGRESOS – GASTOS ) DEPOSITO
+              </td>
+              <td colspan="2" style="border: 2px solid #000000 !important;" class="p-0">
+                <div class="w-full h-full font-bold flex items-center justify-center text-xs" id="lbl-deposito">0.00</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-        <!-- Table Right: Gastos -->
-        <div class="col-span-5 overflow-visible">
-          <table class="table-custom-gastos w-full border-2 border-black text-center text-xs font-bold border-collapse">
-            <thead>
-              <tr class="border-b-2 border-black">
-                <th colspan="2" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
-              </tr>
-              <tr class="border-b-2 border-black text-xxs sm:text-xs">
-                <th class="border-r border-black py-0.5">
-                  <span class="hidden sm:inline-block">Descripcion</span>
-                  <span class="inline-block sm:hidden">Desc.</span>
-                </th>
-                <th class="py-0.5 w-20 sm:w-28"><span>Valor</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr id="gas-row-1" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <div class="valor-centrado">Combustible</div>
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-1" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-2" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <div class="valor-centrado">Conductor</div>
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-2" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-3" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <div class="valor-centrado">Ayudante</div>
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-3" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-4" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <div class="valor-centrado">Mecánica</div>
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-4" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-5" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <div class="valor-centrado">Parqueadero</div>
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-5" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-6" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <input type="text" id="gas-desc-6" placeholder="Otro gasto...">
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-6" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr id="gas-row-7" class="border-b border-black">
-                <td class="border-r border-black p-0 text-left px-2 sm:px-3">
-                  <input type="text" id="gas-desc-7" placeholder="Otro gasto...">
-                </td>
-                <td class="p-0">
-                  <input type="number" step="0.01" id="gas-valor-7" oninput="calculateGastos()">
-                </td>
-              </tr>
-              <tr>
-                <td class="text-right pr-2 font-bold text-xs">
-                  <span class="hidden sm:inline-block">Total Gastos</span>
-                  <span class="inline-block sm:hidden">Total (-)</span>
-                </td>
-                <td class="p-0">
-                  <input type="number" id="total-gastos" readonly value="0.00">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <!-- Table Right: Gastos (w-full overflow-x-auto) -->
+      <div class="lg:col-span-5 w-full overflow-x-auto">
+        <table class="table-custom-gastos min-w-[600px] w-full border-2 border-black text-center text-xs font-bold border-collapse">
+          <thead>
+            <tr class="border-b-2 border-black">
+              <th colspan="2" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
+            </tr>
+            <tr class="border-b-2 border-black text-xxs sm:text-xs">
+              <th class="border-r border-black py-0.5">
+                <span>Descripción</span>
+              </th>
+              <th class="py-0.5 w-28"><span>Valor</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="gas-row-1" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <div class="valor-centrado">Combustible</div>
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-1" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-2" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <div class="valor-centrado">Conductor</div>
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-2" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-3" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <input type="text" id="gas-desc-3" placeholder="Gasto 3...">
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-3" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-4" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <input type="text" id="gas-desc-4" placeholder="Gasto 4...">
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-4" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-5" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <input type="text" id="gas-desc-5" placeholder="Gasto 5...">
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-5" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-6" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <input type="text" id="gas-desc-6" placeholder="Otro gasto...">
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-6" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr id="gas-row-7" class="border-b border-black">
+              <td class="border-r border-black p-0 text-left px-3">
+                <input type="text" id="gas-desc-7" placeholder="Otro gasto...">
+              </td>
+              <td class="p-0">
+                <input type="number" step="0.01" id="gas-valor-7" oninput="calculateGastos()">
+              </td>
+            </tr>
+            <tr style="height: 36px !important;">
+              <td colspan="1" style="border: 2px solid #000000 !important; text-align: right !important; padding-right: 12px !important; font-weight: bold; font-size: 13px;">Total Gastos</td>
+              <td colspan="1" style="border: 2px solid #000000 !important; width: 112px !important; text-align: center !important; font-weight: bold; padding: 0 !important;">
+                <span class="valor-centrado" id="span-total-gastos" style="display: flex !important; align-items: center !important; justify-content: center !important; height: 100% !important; width: 100% !important; line-height: normal !important;">0.00</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -566,15 +551,17 @@
             <span id="preview-nov-operacionales" class="preview-field campo-linea hidden font-normal px-2 w-full block text-left"></span>
           </div>
         </div>
-        <div class="flex flex-col items-center justify-end flex-grow min-w-[200px]">
-          <span class="font-bold text-xs pb-1 shrink-0">Nombre Despacho</span>
-          <div class="underline-container border-b border-black w-full min-h-[28px] flex items-end justify-center pb-1">
-            <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none pb-0.5 text-xs">
+        
+        <!-- Nombre Despacho (Caja Vertical) -->
+        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: flex-end !important; width: 100% !important; min-height: 65px !important; box-sizing: border-box !important;">
+          <span style="font-weight: bold !important; font-size: 14px !important; margin-bottom: 14px !important; display: block !important; text-align: center !important; width: 100% !important;">Nombre Despacho</span>
+          <div class="underline-container" style="border-bottom: 1px solid #000000 !important; width: 100% !important; min-height: 24px !important; text-align: center !important; padding-bottom: 2px !important;">
+            <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none text-xs">
               <option value="">____________________</option>
               <option value="Andrea Trujillo">Andrea Trujillo</option>
               <option value="César Lluco">César Lluco</option>
             </select>
-            <span id="preview-nombre-despacho" class="preview-field campo-linea hidden font-normal px-1 text-center w-full block"></span>
+            <span class="campo-linea-despacho preview-field hidden" style="font-weight: 500 !important; font-size: 14px !important; display: inline-block !important; line-height: 1.2 !important;"></span>
           </div>
         </div>
       </div>
@@ -592,14 +579,6 @@
     function limitDigits(input, maxDigits) {
       if (input.value.length > maxDigits) {
         input.value = input.value.slice(0, maxDigits);
-      }
-    }
-
-    // Input synchronizer for split mobile/desktop crew fields
-    function syncInput(value, targetId) {
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.value = value;
       }
     }
 
@@ -670,7 +649,7 @@
         const val = parseFloat(document.getElementById(`gas-valor-${i}`).value) || 0;
         totalGastos += val;
       }
-      document.getElementById("total-gastos").value = totalGastos.toFixed(2);
+      document.getElementById("span-total-gastos").innerText = totalGastos.toFixed(2);
       recomputeGrandTotals();
     }
 
@@ -682,7 +661,7 @@
         totalIngresos += (bajada + subida);
       }
 
-      const totalGastos = parseFloat(document.getElementById("total-gastos").value) || 0;
+      const totalGastos = parseFloat(document.getElementById("span-total-gastos").innerText) || 0;
       const deposito = totalIngresos - totalGastos;
 
       document.getElementById("lbl-total-ingresos").innerText = totalIngresos.toFixed(2);
@@ -726,24 +705,25 @@
       
       document.getElementById('hoja-registro').classList.add('preview-mode');
       
-      const celdasTablas = document.querySelectorAll('#hoja-registro table td');
-      celdasTablas.forEach(celda => {
+      const celdas = document.querySelectorAll('#hoja-registro table td');
+      celdas.forEach(celda => {
         const input = celda.querySelector('input');
         if (input) {
-          const valor = input.value || "";
-          celda.innerHTML = ""; 
+          const valor = input.value.trim();
+          celda.innerHTML = ""; // Borrón absoluto de la celda
           if (valor !== "") {
-            celda.innerHTML = `<span class="valor-centrado">${parseFloat(valor) ? parseFloat(valor).toFixed(2) : valor}</span>`;
+            celda.innerHTML = `<span class="valor-centrado">${valor}</span>`;
           } else {
-            celda.innerHTML = `<span>&nbsp;</span>`;
+            celda.innerHTML = `<span>&nbsp;</span>`; // Fila vacía limpia
           }
         }
       });
 
-      // Limpiar celda de descripción en Gastos si el valor correspondiente está vacío
+      // Limpieza de filas vacías para Gastos
       for (let i = 1; i <= 7; i++) {
         const valInput = document.getElementById(`gas-valor-${i}`);
-        if (valInput && valInput.value.trim() === "") {
+        const val = valInput ? valInput.value.trim() : "";
+        if (val === "") {
           const row = document.getElementById(`gas-row-${i}`);
           if (row) {
             const descCell = row.querySelector('td:first-child');
@@ -805,7 +785,13 @@
         }
         document.getElementById("preview-lugar-combustible").innerText = stationVal;
         document.getElementById("preview-nov-operacionales").innerText = document.getElementById("input-nov-operacionales").value || "";
-        document.getElementById("preview-nombre-despacho").innerText = document.getElementById("input-nombre-despacho").value || "";
+        
+        // Inyección del Nombre Despacho
+        const despachoSelect = document.getElementById("input-nombre-despacho");
+        const despachoSpan = document.querySelector(".campo-linea-despacho");
+        if (despachoSelect && despachoSpan) {
+          despachoSpan.innerText = despachoSelect.value || "";
+        }
 
         activarVistaPrevia();
 
@@ -966,7 +952,7 @@
         }
 
         const totIng = parseFloat(document.getElementById("lbl-total-ingresos").innerText) || 0;
-        const totGas = parseFloat(document.getElementById("total-gastos").value) || 0;
+        const totGas = parseFloat(document.getElementById("span-total-gastos").innerText) || 0;
         const deposito = totIng - totGas;
 
         data.push([]);
