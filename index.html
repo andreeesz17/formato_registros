@@ -184,101 +184,103 @@
     </div>
   </div>
 
-  <!-- MAIN SHEET CONTAINER -->
-  <div id="hoja-registro" class="max-w-[900px] mx-auto bg-white p-3 sm:p-6 text-black border border-gray-300 shadow-lg">
-    
-    <!-- Title Header -->
-    <div class="text-center mb-6">
-      <h1 class="text-lg sm:text-2xl font-bold tracking-tight text-black" style="font-family: Arial, sans-serif; font-weight: 800;">
-        Coop.Transur “7 de Mayo” - Registro de Trabajo Diario
-      </h1>
-    </div>
+  <!-- SCROLL WRAPPER TO PRESERVE EXACT LAPTOP LAYOUT ON MOBILE -->
+  <div class="w-full overflow-x-auto pb-6">
+    <!-- MAIN SHEET CONTAINER -->
+    <div id="hoja-registro" class="w-[900px] mx-auto bg-white p-6 text-black border border-gray-300 shadow-lg">
+      
+      <!-- Title Header -->
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold tracking-tight text-black" style="font-family: Arial, sans-serif; font-weight: 800;">
+          Coop.Transur “7 de Mayo” - Registro de Trabajo Diario
+        </h1>
+      </div>
 
-    <!-- Metadata Fields -->
-    <div class="space-y-3 mb-6 text-xs sm:text-sm">
-      <!-- Fecha Row -->
-      <div class="flex items-end w-full">
-        <span class="font-bold shrink-0">Fecha:</span>
-        <div class="underline-container relative w-48 ml-2 border-b border-black min-h-[20px] flex items-end">
-          <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer">
-          <span id="display-date" onclick="editDate()" class="campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer"></span>
+      <!-- Metadata Fields -->
+      <div class="space-y-3 mb-6 text-sm">
+        <!-- Fecha Row -->
+        <div class="flex items-end w-full">
+          <span class="font-bold shrink-0">Fecha:</span>
+          <div class="underline-container relative w-48 ml-2 border-b border-black min-h-[20px] flex items-end">
+            <input type="date" id="input-date" required onchange="syncDate(this.value)" class="edit-field bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer">
+            <span id="display-date" onclick="editDate()" class="campo-linea hidden bg-transparent text-black outline-none px-1 font-medium w-full text-left text-xs cursor-pointer"></span>
+          </div>
+        </div>
+        
+        <!-- Ruta, Unidad, Codigo, Km Row -->
+        <div class="flex items-end gap-x-4 gap-y-2 w-full text-xs">
+          <div class="flex items-end min-w-[140px] flex-grow">
+            <span class="font-bold shrink-0">Ruta:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+              <select id="input-ruta" required class="edit-field w-full bg-transparent text-black outline-none px-1 font-medium cursor-pointer appearance-none">
+                <option value="">____________________</option>
+                <option value="EL ROCÍO">EL ROCÍO</option>
+                <option value="PAQUISHA">PAQUISHA</option>
+                <option value="ANILLO">ANILLO</option>
+              </select>
+              <span id="preview-ruta" class="preview-field campo-linea hidden font-medium px-1 w-full block text-left"></span>
+            </div>
+          </div>
+
+          <div class="flex items-end w-20 shrink-0">
+            <span class="font-bold shrink-0">Unidad:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+              <input type="number" id="input-unidad" required class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
+              <span id="preview-unidad" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
+            </div>
+          </div>
+
+          <div class="flex items-end w-20 shrink-0">
+            <span class="font-bold shrink-0">Codigo:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+              <input type="number" id="input-codigo" required oninput="limitDigits(this, 4)" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
+              <span id="preview-codigo" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
+            </div>
+          </div>
+
+          <div class="flex items-end w-28 shrink-0">
+            <span class="font-bold shrink-0">Km Inicial:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+              <input type="number" id="input-kminicial" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
+              <span id="preview-kminicial" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
+            </div>
+          </div>
+
+          <div class="flex items-end w-28 shrink-0">
+            <span class="font-bold shrink-0">Km Final:</span>
+            <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
+              <input type="number" id="input-kmfinal" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
+              <span id="preview-kmfinal" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <!-- Ruta, Unidad, Codigo, Km Row -->
-      <div class="flex flex-wrap items-end gap-x-4 gap-y-2 w-full text-xs">
-        <div class="flex items-end min-w-[140px] flex-grow">
-          <span class="font-bold shrink-0">Ruta:</span>
-          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
-            <select id="input-ruta" required class="edit-field w-full bg-transparent text-black outline-none px-1 font-medium cursor-pointer appearance-none">
-              <option value="">____________________</option>
-              <option value="EL ROCÍO">EL ROCÍO</option>
-              <option value="PAQUISHA">PAQUISHA</option>
-              <option value="ANILLO">ANILLO</option>
-            </select>
-            <span id="preview-ruta" class="preview-field campo-linea hidden font-medium px-1 w-full block text-left"></span>
-          </div>
-        </div>
 
-        <div class="flex items-end w-20 shrink-0">
-          <span class="font-bold shrink-0">Unidad:</span>
-          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
-            <input type="number" id="input-unidad" required class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
-            <span id="preview-unidad" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
-          </div>
-        </div>
-
-        <div class="flex items-end w-20 shrink-0">
-          <span class="font-bold shrink-0">Codigo:</span>
-          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
-            <input type="number" id="input-codigo" required oninput="limitDigits(this, 4)" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
-            <span id="preview-codigo" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
-          </div>
-        </div>
-
-        <div class="flex items-end w-28 shrink-0">
-          <span class="font-bold shrink-0">Km Inicial:</span>
-          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
-            <input type="number" id="input-kminicial" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
-            <span id="preview-kminicial" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
-          </div>
-        </div>
-
-        <div class="flex items-end w-28 shrink-0">
-          <span class="font-bold shrink-0">Km Final:</span>
-          <div class="underline-container border-b border-black w-full ml-1 min-h-[20px] flex items-end">
-            <input type="number" id="input-kmfinal" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center font-medium">
-            <span id="preview-kmfinal" class="preview-field campo-linea hidden text-center font-medium px-1 w-full block"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Responsive Tables Container -->
-    <div id="tablas-grid-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-4">
-      
-      <!-- Table Left: Ingresos (Fluid) -->
-      <div class="lg:col-span-7 w-full">
-        <table class="w-full table-fixed border-2 border-black text-center text-xs font-bold border-collapse">
-          <colgroup>
-            <col style="width: 15%;">
-            <col style="width: 28%;">
-            <col style="width: 28%;">
-            <col style="width: 29%;">
-          </colgroup>
-          <thead>
-            <tr class="border-b-2 border-black">
-              <th colspan="4" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
-            </tr>
-            <tr class="border-b-2 border-black text-xxs sm:text-xs">
-              <th class="border-r border-black py-0.5">
-                <span>Vuelta</span>
-              </th>
-              <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
-              <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
-              <th class="py-0.5"><span>$ Total</span></th>
-            </tr>
-          </thead>
+      <!-- Tables Container (Always side-by-side) -->
+      <div id="tablas-grid-wrapper" class="grid grid-cols-12 gap-6 mb-4">
+        
+        <!-- Table Left: Ingresos -->
+        <div class="col-span-7 w-full">
+          <table class="w-full table-fixed border-2 border-black text-center text-xs font-bold border-collapse">
+            <colgroup>
+              <col style="width: 15%;">
+              <col style="width: 28%;">
+              <col style="width: 28%;">
+              <col style="width: 29%;">
+            </colgroup>
+            <thead>
+              <tr class="border-b-2 border-black">
+                <th colspan="4" class="py-1 text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
+              </tr>
+              <tr class="border-b-2 border-black text-xs">
+                <th class="border-r border-black py-0.5">
+                  <span>Vuelta</span>
+                </th>
+                <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
+                <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
+                <th class="py-0.5"><span>$ Total</span></th>
+              </tr>
+            </thead>
           <tbody>
             <script>
               for (let i = 1; i <= 6; i++) {
@@ -316,8 +318,8 @@
         </table>
       </div>
 
-      <!-- Table Right: Gastos (Fluid) -->
-      <div class="lg:col-span-5 w-full">
+      <!-- Table Right: Gastos -->
+      <div class="col-span-5 w-full">
         <table class="table-custom-gastos w-full table-fixed border-2 border-black text-center text-xs font-bold border-collapse">
           <colgroup>
             <col style="width: 65%;">
@@ -325,9 +327,9 @@
           </colgroup>
           <thead>
             <tr class="border-b-2 border-black">
-              <th colspan="2" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
+              <th colspan="2" class="py-1 text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
             </tr>
-            <tr class="border-b-2 border-black text-xxs sm:text-xs">
+            <tr class="border-b-2 border-black text-xs">
               <th class="border-r border-black py-0.5">
                 <span>Descripción</span>
               </th>
@@ -404,7 +406,7 @@
 
     <!-- Crew / Signatures Section (EDIT MODE) -->
     <div id="crew-edit" class="edit-field mt-6 no-print">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4">
         <!-- Conductor Principal -->
         <div class="border border-gray-300 p-3 bg-gray-50 rounded shadow-sm space-y-3">
           <div class="font-bold text-xs uppercase text-amber-600 border-b border-gray-200 pb-1">Conductor Principal</div>
@@ -471,7 +473,7 @@
     </div>
 
     <!-- Crew / Signatures Section (PREVIEW & PRINT MODE) -->
-    <div id="crew-print" class="preview-field hidden mt-6 text-xs sm:text-sm">
+    <div id="crew-print" class="preview-field hidden mt-6 text-sm">
       <div class="grid grid-cols-12 gap-x-6 mb-2 text-center font-bold text-xs">
         <div class="col-span-3"></div>
         <div class="col-span-3">Conductor Principal</div>
@@ -524,10 +526,10 @@
     </div>
 
     <!-- Bottom Details Block (Novedades, Estación, Nombre Despacho) -->
-    <div class="space-y-4 mt-6 text-xs sm:text-sm">
+    <div class="space-y-4 mt-6 text-sm">
       <!-- Row 1: Mechanical News / Fuel Station -->
-      <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
-        <div class="flex items-end w-full lg:w-[50%] shrink-0">
+      <div class="flex items-end gap-6 w-full">
+        <div class="flex items-end w-[50%] shrink-0">
           <span class="font-bold shrink-0">Novedades Mecanicas:</span>
           <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
             <input type="text" id="input-nov-mecanicas" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
@@ -554,8 +556,8 @@
       </div>
 
       <!-- Row 2: Operational News / Dispatch name -->
-      <div class="flex flex-wrap lg:flex-nowrap items-end gap-6 w-full">
-        <div class="flex items-end w-full lg:w-[68%] shrink-0">
+      <div class="flex items-end gap-6 w-full">
+        <div class="flex items-end w-[68%] shrink-0">
           <span class="font-bold shrink-0">Novedades Operacionales o Fiscalizaciones:</span>
           <div class="underline-container border-b border-black w-full ml-1.5 min-h-[28px] flex items-end pb-1">
             <input type="text" id="input-nov-operacionales" class="edit-field w-full bg-transparent text-black outline-none px-2 pb-0.5">
@@ -564,7 +566,7 @@
         </div>
         
         <!-- Nombre Despacho (Caja Vertical) -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: flex-end !important; width: 100% !important; min-height: 65px !important; box-sizing: border-box !important;">
+        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: flex-end !important; width: 32% !important; min-height: 65px !important; box-sizing: border-box !important;">
           <span style="font-weight: bold !important; font-size: 14px !important; margin-bottom: 14px !important; display: block !important; text-align: center !important; width: 100% !important;">Nombre Despacho</span>
           <div class="underline-container" style="border-bottom: 1px solid #000000 !important; width: 100% !important; min-height: 24px !important; text-align: center !important; padding-bottom: 2px !important;">
             <select id="input-nombre-despacho" class="edit-field w-full bg-transparent text-black outline-none px-1 text-center cursor-pointer appearance-none text-xs">
@@ -583,6 +585,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <!-- GALLERY DOWNLOAD OVERLAY MODAL (For mobile users to easily save to photos) -->
   <div id="modal-galeria" class="hidden fixed inset-0 bg-black/80 flex flex-col items-center justify-center p-4 z-50 no-print">
