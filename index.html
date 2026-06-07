@@ -140,22 +140,16 @@
       height: 12px;
     }
 
-    /* Force physical A4 size side-by-side tables on Print or Export */
+    /* Force physical A4 ratio size on Print or Export */
     @media print, .preview-mode {
       #hoja-registro {
-        width: 210mm !important;
-        height: 297mm !important;
-        max-width: 210mm !important;
-        padding: 10mm !important;
+        width: 900px !important;
+        height: 1273px !important;
+        max-width: 900px !important;
+        padding: 24px !important;
         margin: 0 auto !important;
         box-sizing: border-box !important;
         background: #ffffff !important;
-      }
-      #tablas-grid-wrapper {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 1.5rem !important;
-        min-width: 0 !important;
       }
       #hoja-registro table td input {
         display: none !important;
@@ -184,10 +178,10 @@
     </div>
   </div>
 
-  <!-- SCROLL WRAPPER TO PRESERVE EXACT LAPTOP LAYOUT ON MOBILE -->
-  <div class="w-full overflow-x-auto pb-6">
+  <!-- SHEET SCALER TO FIT SCREEN ON MOBILE -->
+  <div id="sheet-scaler" class="w-full flex justify-center overflow-hidden pb-6">
     <!-- MAIN SHEET CONTAINER -->
-    <div id="hoja-registro" class="w-[900px] mx-auto bg-white p-6 text-black border border-gray-300 shadow-lg">
+    <div id="hoja-registro" class="w-[900px] mx-auto bg-white p-6 text-black border border-gray-300 shadow-lg origin-top shrink-0">
       
       <!-- Title Header -->
       <div class="text-center mb-6">
@@ -858,7 +852,36 @@
         document.getElementById("btn-toggle-preview").setAttribute("onclick", "togglePreview(true)");
         document.getElementById("btn-toggle-preview").classList.replace("bg-emerald-500", "bg-amber-500");
       }
+      // Reajustar escala del lienzo al cambiar de modo
+      setTimeout(adjustScale, 50);
     }
+
+    // Función para auto-ajustar el tamaño del lienzo en celulares (Zoom out a toda la hoja)
+    function adjustScale() {
+      const container = document.getElementById("sheet-scaler");
+      const sheet = document.getElementById("hoja-registro");
+      if (!container || !sheet) return;
+
+      const containerWidth = container.clientWidth;
+      const baseWidth = 900;
+
+      if (containerWidth < baseWidth) {
+        const scale = containerWidth / baseWidth;
+        sheet.style.transform = `scale(${scale})`;
+        sheet.style.transformOrigin = "top center";
+        
+        // Ajustamos la altura del contenedor para evitar espacio en blanco vertical
+        const scaledHeight = sheet.getBoundingClientRect().height;
+        container.style.height = `${scaledHeight}px`;
+      } else {
+        sheet.style.transform = "";
+        sheet.style.transformOrigin = "";
+        container.style.height = "";
+      }
+    }
+
+    window.addEventListener("load", adjustScale);
+    window.addEventListener("resize", adjustScale);
 
     function cerrarModalGaleria() {
       document.getElementById("modal-galeria").classList.add("hidden");
@@ -887,6 +910,22 @@
         if (wasInEdit) togglePreview(true);
 
         setTimeout(() => {
+          const originalElement = document.getElementById("hoja-registro");
+          
+          // Clonar el nodo para renderizar fuera de la pantalla a tamaño completo (evita recortes en móvil)
+          const clone = originalElement.cloneNode(true);
+          clone.style.transform = "none";
+          clone.style.transformOrigin = "top left";
+          clone.style.position = "absolute";
+          clone.style.top = "-9999px";
+          clone.style.left = "-9999px";
+          clone.style.width = "900px";
+          clone.style.height = "auto";
+          clone.style.opacity = "1";
+          clone.classList.add("preview-mode");
+
+          document.body.appendChild(clone);
+
           const opt = {
             margin: [0, 0, 0, 0],
             filename: `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`,
@@ -894,22 +933,23 @@
             html2canvas: { 
               scale: 3, 
               useCORS: true,
-              width: 794,
-              height: 1123,
-              windowWidth: 794,
-              windowHeight: 1123
+              width: 900,
+              windowWidth: 900
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
           };
 
-          const element = document.getElementById("hoja-registro");
-          html2pdf().set(opt).from(element).save().then(() => {
+          html2pdf().set(opt).from(clone).save().then(() => {
+            document.body.removeChild(clone);
             if (wasInEdit) togglePreview(false);
           }).catch(err => {
+            if (document.body.contains(clone)) {
+              document.body.removeChild(clone);
+            }
             alert("Error durante la generación del PDF: " + err.message);
             if (wasInEdit) togglePreview(false);
           });
-        }, 100);
+        }, 150);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar PDF: " + error.message);
       }
@@ -922,16 +962,31 @@
         if (wasInEdit) togglePreview(true);
 
         setTimeout(() => {
-          const element = document.getElementById("hoja-registro");
-          html2canvas(element, {
+          const originalElement = document.getElementById("hoja-registro");
+          
+          // Clonar el nodo para renderizar fuera de la pantalla a tamaño completo (evita recortes en móvil)
+          const clone = originalElement.cloneNode(true);
+          clone.style.transform = "none";
+          clone.style.transformOrigin = "top left";
+          clone.style.position = "absolute";
+          clone.style.top = "-9999px";
+          clone.style.left = "-9999px";
+          clone.style.width = "900px";
+          clone.style.height = "auto";
+          clone.style.opacity = "1";
+          clone.classList.add("preview-mode");
+
+          document.body.appendChild(clone);
+
+          html2canvas(clone, {
             scale: 3,
             useCORS: true,
             backgroundColor: "#ffffff",
-            width: 794,
-            height: 1123,
-            windowWidth: 794,
-            windowHeight: 1123
+            width: 900,
+            windowWidth: 900
           }).then(canvas => {
+            document.body.removeChild(clone);
+
             canvas.toBlob(blob => {
               const filename = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
               const file = new File([blob], filename, { type: "image/png" });
@@ -971,7 +1026,6 @@
                   if (wasInEdit) togglePreview(false);
                 })
                 .catch(err => {
-                  // Si cancela o hay error, ejecutar fallback
                   runFallback();
                 });
               } else {
@@ -979,10 +1033,13 @@
               }
             }, "image/png");
           }).catch(err => {
+            if (document.body.contains(clone)) {
+              document.body.removeChild(clone);
+            }
             alert("Error durante la generación de la imagen: " + err.message);
             if (wasInEdit) togglePreview(false);
           });
-        }, 100);
+        }, 150);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar Imagen: " + error.message);
       }
