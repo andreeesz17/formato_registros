@@ -353,7 +353,7 @@
             </tr>
             <tr id="gas-row-3" class="border-b border-black">
               <td class="border-r border-black p-0 text-left px-3">
-                <div class="valor-centrado">Parqueadero</div>
+                <div class="valor-centrado">Ayudante</div>
               </td>
               <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-3" oninput="calculateGastos()">
@@ -361,7 +361,7 @@
             </tr>
             <tr id="gas-row-4" class="border-b border-black">
               <td class="border-r border-black p-0 text-left px-3">
-                <input type="text" id="gas-desc-4" placeholder="Otro gasto...">
+                <div class="valor-centrado">Mecánica</div>
               </td>
               <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-4" oninput="calculateGastos()">
@@ -369,7 +369,7 @@
             </tr>
             <tr id="gas-row-5" class="border-b border-black">
               <td class="border-r border-black p-0 text-left px-3">
-                <input type="text" id="gas-desc-5" placeholder="Otro gasto...">
+                <div class="valor-centrado">Parqueadero</div>
               </td>
               <td class="p-0">
                 <input type="number" step="0.01" id="gas-valor-5" oninput="calculateGastos()">
@@ -943,8 +943,8 @@
           let val = parseFloat(document.getElementById(`gas-valor-${i}`).value) || 0;
           
           if (val > 0) {
-            if (i <= 3) {
-              const fixedDescs = ["Combustible", "Conductor", "Parqueadero"];
+            if (i <= 5) {
+              const fixedDescs = ["Combustible", "Conductor", "Ayudante", "Mecánica", "Parqueadero"];
               desc = fixedDescs[i - 1];
             } else {
               const descInput = document.getElementById(`gas-desc-${i}`);
