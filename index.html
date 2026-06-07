@@ -932,27 +932,52 @@
             windowWidth: 794,
             windowHeight: 1123
           }).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-            
-            // Configurar vista previa en el modal
-            const previewImg = document.getElementById("img-modal-preview");
-            if (previewImg) {
-              previewImg.src = imgData;
-            }
-            
-            // Mostrar modal de galería para móviles
-            const modal = document.getElementById("modal-galeria");
-            if (modal) {
-              modal.classList.remove("hidden");
-            }
+            canvas.toBlob(blob => {
+              const filename = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
+              const file = new File([blob], filename, { type: "image/png" });
 
-            // Descarga automática en desktop
-            const link = document.createElement("a");
-            link.download = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
-            link.href = imgData;
-            link.click();
+              function runFallback() {
+                const imgData = canvas.toDataURL("image/png");
+                
+                // Configurar vista previa en el modal
+                const previewImg = document.getElementById("img-modal-preview");
+                if (previewImg) {
+                  previewImg.src = imgData;
+                }
+                
+                // Mostrar modal de galería para móviles
+                const modal = document.getElementById("modal-galeria");
+                if (modal) {
+                  modal.classList.remove("hidden");
+                }
 
-            if (wasInEdit) togglePreview(false);
+                // Descarga automática tradicional (para PC/laptops)
+                const link = document.createElement("a");
+                link.download = filename;
+                link.href = imgData;
+                link.click();
+
+                if (wasInEdit) togglePreview(false);
+              }
+
+              // Intentar usar la API de Compartir nativa (espectacular para iOS Safari / Android Chrome)
+              if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                  files: [file],
+                  title: 'Registro de Trabajo',
+                  text: 'Registro de Trabajo Diario'
+                })
+                .then(() => {
+                  if (wasInEdit) togglePreview(false);
+                })
+                .catch(err => {
+                  // Si cancela o hay error, ejecutar fallback
+                  runFallback();
+                });
+              } else {
+                runFallback();
+              }
+            }, "image/png");
           }).catch(err => {
             alert("Error durante la generación de la imagen: " + err.message);
             if (wasInEdit) togglePreview(false);
