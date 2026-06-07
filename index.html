@@ -257,20 +257,26 @@
     <!-- Responsive Tables Container -->
     <div id="tablas-grid-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-4">
       
-      <!-- Table Left: Ingresos (w-full overflow-x-auto) -->
-      <div class="lg:col-span-7 w-full overflow-x-auto">
-        <table class="min-w-[600px] w-full border-2 border-black text-center text-xs font-bold border-collapse">
+      <!-- Table Left: Ingresos (Fluid) -->
+      <div class="lg:col-span-7 w-full">
+        <table class="w-full table-fixed border-2 border-black text-center text-xs font-bold border-collapse">
+          <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 28%;">
+            <col style="width: 28%;">
+            <col style="width: 29%;">
+          </colgroup>
           <thead>
             <tr class="border-b-2 border-black">
               <th colspan="4" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Ingresos</span></th>
             </tr>
             <tr class="border-b-2 border-black text-xxs sm:text-xs">
-              <th class="border-r border-black py-0.5 w-14">
+              <th class="border-r border-black py-0.5">
                 <span>Vuelta</span>
               </th>
               <th class="border-r border-black py-0.5"><span>$ Bajada</span></th>
               <th class="border-r border-black py-0.5"><span>$ Subida</span></th>
-              <th class="py-0.5 w-20"><span>$ Total</span></th>
+              <th class="py-0.5"><span>$ Total</span></th>
             </tr>
           </thead>
           <tbody>
@@ -310,9 +316,13 @@
         </table>
       </div>
 
-      <!-- Table Right: Gastos (w-full overflow-x-auto) -->
-      <div class="lg:col-span-5 w-full overflow-x-auto">
-        <table class="table-custom-gastos min-w-[600px] w-full border-2 border-black text-center text-xs font-bold border-collapse">
+      <!-- Table Right: Gastos (Fluid) -->
+      <div class="lg:col-span-5 w-full">
+        <table class="table-custom-gastos w-full table-fixed border-2 border-black text-center text-xs font-bold border-collapse">
+          <colgroup>
+            <col style="width: 65%;">
+            <col style="width: 35%;">
+          </colgroup>
           <thead>
             <tr class="border-b-2 border-black">
               <th colspan="2" class="py-1 text-xs sm:text-sm uppercase font-bold tracking-wide"><span>Gastos</span></th>
@@ -321,7 +331,7 @@
               <th class="border-r border-black py-0.5">
                 <span>Descripción</span>
               </th>
-              <th class="py-0.5 w-28"><span>Valor</span></th>
+              <th class="py-0.5"><span>Valor</span></th>
             </tr>
           </thead>
           <tbody>
