@@ -871,10 +871,12 @@
 
           // Guardamos el tamaño actual y forzamos el ancho a 900px para captura correcta
           const prevWidth = originalElement.style.width;
+          const prevPadding = originalElement.style.paddingBottom;
           originalElement.style.width = "900px";
+          originalElement.style.setProperty('padding-bottom', '8px', 'important');
 
           html2canvas(originalElement, {
-            scale: 2,
+            scale: 3,
             useCORS: true,
             backgroundColor: "#ffffff",
             width: 900,
@@ -883,6 +885,7 @@
             scrollY: -window.scrollY
           }).then(canvas => {
             originalElement.style.width = prevWidth;
+            originalElement.style.paddingBottom = prevPadding;
 
             const imgData = canvas.toDataURL('image/jpeg', 0.98);
 
@@ -893,7 +896,9 @@
             // Márgenes pequeños, imagen empieza desde arriba
             const marginX = 3;
             const marginY = 3;
-            const usableW = pdfW - marginX * 2;
+            // Ancho reducido para que el contenido se vea más compacto
+            const usableW = 110;
+            const offsetX = (pdfW - usableW) / 2;
 
             // Escalar la imagen para que llene el ancho disponible
             const imgH = (canvas.height * usableW) / canvas.width;
@@ -906,7 +911,7 @@
             });
 
             // Siempre colocar desde arriba, sin centrado vertical
-            pdf.addImage(imgData, 'JPEG', marginX, marginY, usableW, imgH);
+            pdf.addImage(imgData, 'JPEG', offsetX, marginY, usableW, imgH);
             pdf.save(`registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`);
 
             if (wasInEdit) togglePreview(false);
