@@ -890,9 +890,12 @@
             const pdfW = 148;
             const pdfH = 210;
 
-            // Ajustar la imagen con un pequeño margen para que quede centrada y limpia
-            const margin = 4;
-            const usableW = pdfW - margin * 2;
+            // Márgenes pequeños, imagen empieza desde arriba
+            const marginX = 3;
+            const marginY = 3;
+            const usableW = pdfW - marginX * 2;
+
+            // Escalar la imagen para que llene el ancho disponible
             const imgH = (canvas.height * usableW) / canvas.width;
 
             const { jsPDF } = window.jspdf;
@@ -902,10 +905,8 @@
               format: 'a5'
             });
 
-            // Centrar verticalmente si hay espacio sobrante
-            const offsetY = imgH < pdfH ? (pdfH - imgH) / 2 : 0;
-
-            pdf.addImage(imgData, 'JPEG', margin, offsetY, usableW, imgH);
+            // Siempre colocar desde arriba, sin centrado vertical
+            pdf.addImage(imgData, 'JPEG', marginX, marginY, usableW, imgH);
             pdf.save(`registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`);
 
             if (wasInEdit) togglePreview(false);
