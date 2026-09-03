@@ -47,6 +47,7 @@
     }
     input[type=number] {
       -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     /* Force pure black thick borders on all tables and cells */
@@ -88,7 +89,6 @@
       width: 90% !important;
       margin: 0 auto !important;
       text-align: center !important;
-      vertical-align: middle !important;
       line-height: normal !important;
       box-sizing: border-box !important;
       background: #ffffff !important;
@@ -140,8 +140,8 @@
       height: 12px;
     }
 
-    /* Force physical A4 ratio size on Print or Export */
-    @media print, .preview-mode {
+    /* Force physical A4 ratio size on Print */
+    @media print {
       #hoja-registro {
         width: 900px !important;
         height: 1273px !important;
@@ -154,6 +154,20 @@
       #hoja-registro table td input {
         display: none !important;
       }
+    }
+    
+    /* Force physical A4 ratio size on Preview/Export */
+    .preview-mode {
+      width: 900px !important;
+      height: 1273px !important;
+      max-width: 900px !important;
+      padding: 24px !important;
+      margin: 0 auto !important;
+      box-sizing: border-box !important;
+      background: #ffffff !important;
+    }
+    .preview-mode table td input {
+      display: none !important;
     }
   </style>
 </head>
