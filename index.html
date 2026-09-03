@@ -22,8 +22,8 @@
   </script>
 
   <!-- External Libraries CDNs for Export Functionality -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
@@ -849,12 +849,8 @@
     }
 
     function checkLibrary(libName) {
-      if (libName === 'html2pdf' && typeof html2pdf === 'undefined') {
-        alert("La librería para generar PDFs no se ha cargado.");
-        return false;
-      }
       if (libName === 'html2canvas' && typeof html2canvas === 'undefined') {
-        alert("La librería para generar imágenes no se ha cargado.");
+        alert("La librería para generar capturas no se ha cargado.");
         return false;
       }
       if (libName === 'xlsx' && typeof XLSX === 'undefined') {
@@ -865,36 +861,61 @@
     }
 
     function exportPDF() {
-      if (!checkLibrary('html2pdf')) return;
+      if (!checkLibrary('html2canvas')) return;
       try {
         const wasInEdit = !document.getElementById("hoja-registro").classList.contains("preview-mode");
         if (wasInEdit) togglePreview(true);
 
         setTimeout(() => {
           const originalElement = document.getElementById("hoja-registro");
-          
-          const opt = {
-            margin: [0, 0, 0, 0],
-            filename: `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-              scale: 2, 
-              useCORS: true,
-              width: 900,
-              windowWidth: 900,
-              scrollX: 0,
-              scrollY: 0
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          };
 
-          html2pdf().set(opt).from(originalElement).save().then(() => {
+          // Guardamos el tamaño actual y forzamos el ancho a 900px para captura correcta
+          const prevWidth = originalElement.style.width;
+          originalElement.style.width = "900px";
+
+          html2canvas(originalElement, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            width: 900,
+            windowWidth: 900,
+            scrollX: 0,
+            scrollY: -window.scrollY
+          }).then(canvas => {
+            originalElement.style.width = prevWidth;
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.98);
+
+            // Dimensiones A4 en mm
+            const pdfW = 210;
+            const pdfH = 297;
+
+            // Ajustar la imagen para que quepa exactamente en una hoja A4
+            const imgW = pdfW;
+            const imgH = (canvas.height * pdfW) / canvas.width;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+              orientation: imgH > pdfH ? 'portrait' : 'portrait',
+              unit: 'mm',
+              format: 'a4'
+            });
+
+            // Si el contenido es más alto que A4, se escala para que entre en una sola página
+            const finalH = Math.min(imgH, pdfH);
+            const finalW = finalH === pdfH ? (canvas.width * pdfH) / canvas.height : imgW;
+            const offsetX = (pdfW - finalW) / 2;
+
+            pdf.addImage(imgData, 'JPEG', offsetX, 0, finalW, finalH);
+            pdf.save(`registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`);
+
             if (wasInEdit) togglePreview(false);
           }).catch(err => {
+            originalElement.style.width = prevWidth;
             alert("Error durante la generación del PDF: " + err.message);
             if (wasInEdit) togglePreview(false);
           });
-        }, 150);
+        }, 250);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar PDF: " + error.message);
       }
@@ -908,87 +929,35 @@
 
         setTimeout(() => {
           const originalElement = document.getElementById("hoja-registro");
-          
-          // Clonar el nodo para renderizar fuera de la pantalla a tamaño completo (evita recortes en móvil)
-          const clone = originalElement.cloneNode(true);
-          clone.style.transform = "none";
-          clone.style.transformOrigin = "top left";
-          clone.style.position = "absolute";
-          clone.style.top = "0";
-          clone.style.left = "0";
-          clone.style.setProperty('margin', '0', 'important');
-          clone.style.zIndex = "-9999";
-          clone.style.width = "900px";
-          clone.style.height = "auto";
-          clone.style.opacity = "1";
-          clone.classList.add("preview-mode");
 
-          document.body.appendChild(clone);
+          const prevWidth = originalElement.style.width;
+          originalElement.style.width = "900px";
 
-          html2canvas(clone, {
+          html2canvas(originalElement, {
             scale: 2,
             useCORS: true,
             backgroundColor: "#ffffff",
             width: 900,
             windowWidth: 900,
             scrollX: 0,
-            scrollY: 0
+            scrollY: -window.scrollY
           }).then(canvas => {
-            document.body.removeChild(clone);
+            originalElement.style.width = prevWidth;
 
-            canvas.toBlob(blob => {
-              const filename = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
-              const file = new File([blob], filename, { type: "image/png" });
+            const filename = `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.png`;
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-              function runFallback() {
-                const imgData = canvas.toDataURL("image/png");
-                
-                // Configurar vista previa en el modal
-                const previewImg = document.getElementById("img-modal-preview");
-                if (previewImg) {
-                  previewImg.src = imgData;
-                }
-                
-                // Mostrar modal de galería para móviles
-                const modal = document.getElementById("modal-galeria");
-                if (modal) {
-                  modal.classList.remove("hidden");
-                }
-
-                // Descarga automática tradicional (para PC/laptops)
-                const link = document.createElement("a");
-                link.download = filename;
-                link.href = imgData;
-                link.click();
-
-                if (wasInEdit) togglePreview(false);
-              }
-
-              // Intentar usar la API de Compartir nativa (espectacular para iOS Safari / Android Chrome)
-              if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                navigator.share({
-                  files: [file],
-                  title: 'Registro de Trabajo',
-                  text: 'Registro de Trabajo Diario'
-                })
-                .then(() => {
-                  if (wasInEdit) togglePreview(false);
-                })
-                .catch(err => {
-                  runFallback();
-                });
-              } else {
-                runFallback();
-              }
-            }, "image/png");
+            if (wasInEdit) togglePreview(false);
           }).catch(err => {
-            if (document.body.contains(clone)) {
-              document.body.removeChild(clone);
-            }
             alert("Error durante la generación de la imagen: " + err.message);
             if (wasInEdit) togglePreview(false);
           });
-        }, 150);
+        }, 250);
       } catch (error) {
         alert("Ocurrió un error inesperado al exportar Imagen: " + error.message);
       }
