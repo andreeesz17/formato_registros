@@ -886,27 +886,26 @@
 
             const imgData = canvas.toDataURL('image/jpeg', 0.98);
 
-            // Dimensiones A4 en mm
-            const pdfW = 210;
-            const pdfH = 297;
+            // Dimensiones A5 (mitad de A4) en mm
+            const pdfW = 148;
+            const pdfH = 210;
 
-            // Ajustar la imagen para que quepa exactamente en una hoja A4
-            const imgW = pdfW;
-            const imgH = (canvas.height * pdfW) / canvas.width;
+            // Ajustar la imagen con un pequeño margen para que quede centrada y limpia
+            const margin = 4;
+            const usableW = pdfW - margin * 2;
+            const imgH = (canvas.height * usableW) / canvas.width;
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({
-              orientation: imgH > pdfH ? 'portrait' : 'portrait',
+              orientation: 'portrait',
               unit: 'mm',
-              format: 'a4'
+              format: 'a5'
             });
 
-            // Si el contenido es más alto que A4, se escala para que entre en una sola página
-            const finalH = Math.min(imgH, pdfH);
-            const finalW = finalH === pdfH ? (canvas.width * pdfH) / canvas.height : imgW;
-            const offsetX = (pdfW - finalW) / 2;
+            // Centrar verticalmente si hay espacio sobrante
+            const offsetY = imgH < pdfH ? (pdfH - imgH) / 2 : 0;
 
-            pdf.addImage(imgData, 'JPEG', offsetX, 0, finalW, finalH);
+            pdf.addImage(imgData, 'JPEG', margin, offsetY, usableW, imgH);
             pdf.save(`registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`);
 
             if (wasInEdit) togglePreview(false);
