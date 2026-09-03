@@ -873,28 +873,12 @@
         setTimeout(() => {
           const originalElement = document.getElementById("hoja-registro");
           
-          // Clonar el nodo para renderizar fuera de la pantalla a tamaño completo (evita recortes en móvil)
-          const clone = originalElement.cloneNode(true);
-          clone.style.transform = "none";
-          clone.style.transformOrigin = "top left";
-          clone.style.position = "absolute";
-          clone.style.top = "0";
-          clone.style.left = "0";
-          clone.style.setProperty('margin', '0', 'important');
-          clone.style.zIndex = "-9999";
-          clone.style.width = "900px";
-          clone.style.height = "auto";
-          clone.style.opacity = "1";
-          clone.classList.add("preview-mode");
-
-          document.body.appendChild(clone);
-
           const opt = {
             margin: [0, 0, 0, 0],
             filename: `registro_trabajo_${document.getElementById("input-unidad").value || '7_de_mayo'}.pdf`,
-            image: { type: 'jpeg', quality: 1 },
+            image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
-              scale: 3, 
+              scale: 2, 
               useCORS: true,
               width: 900,
               windowWidth: 900,
@@ -904,13 +888,9 @@
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
           };
 
-          html2pdf().set(opt).from(clone).save().then(() => {
-            document.body.removeChild(clone);
+          html2pdf().set(opt).from(originalElement).save().then(() => {
             if (wasInEdit) togglePreview(false);
           }).catch(err => {
-            if (document.body.contains(clone)) {
-              document.body.removeChild(clone);
-            }
             alert("Error durante la generación del PDF: " + err.message);
             if (wasInEdit) togglePreview(false);
           });
@@ -946,7 +926,7 @@
           document.body.appendChild(clone);
 
           html2canvas(clone, {
-            scale: 3,
+            scale: 2,
             useCORS: true,
             backgroundColor: "#ffffff",
             width: 900,
