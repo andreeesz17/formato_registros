@@ -864,8 +864,9 @@
           clone.style.transform = "none";
           clone.style.transformOrigin = "top left";
           clone.style.position = "absolute";
-          clone.style.top = "-9999px";
-          clone.style.left = "-9999px";
+          clone.style.top = "0";
+          clone.style.left = "0";
+          clone.style.zIndex = "-9999";
           clone.style.width = "900px";
           clone.style.height = "auto";
           clone.style.opacity = "1";
@@ -881,7 +882,11 @@
               scale: 3, 
               useCORS: true,
               width: 900,
-              windowWidth: 900
+              windowWidth: 900,
+              scrollX: 0,
+              scrollY: 0,
+              x: 0,
+              y: 0
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
           };
@@ -916,8 +921,9 @@
           clone.style.transform = "none";
           clone.style.transformOrigin = "top left";
           clone.style.position = "absolute";
-          clone.style.top = "-9999px";
-          clone.style.left = "-9999px";
+          clone.style.top = "0";
+          clone.style.left = "0";
+          clone.style.zIndex = "-9999";
           clone.style.width = "900px";
           clone.style.height = "auto";
           clone.style.opacity = "1";
@@ -930,7 +936,11 @@
             useCORS: true,
             backgroundColor: "#ffffff",
             width: 900,
-            windowWidth: 900
+            windowWidth: 900,
+            scrollX: 0,
+            scrollY: 0,
+            x: 0,
+            y: 0
           }).then(canvas => {
             document.body.removeChild(clone);
 
